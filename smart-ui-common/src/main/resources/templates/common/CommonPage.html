@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title th:text="${title}">公共页面</title>
+
+    <!--引入element ui-->
+    <div th:replace="common/common-resources :: common-resources-ant-css"></div>
+    <link rel="stylesheet" th:href="@{/css/common/common.css}"/>
+    <div th:replace="common/common-resources :: common-resources-contextPath"></div>
+
+    <!--<script th:src="@{/js/plugins/arcgis/vue-arcgis2.umd.min.js}"></script>-->
+
+    <script type="text/javascript" th:inline="javascript">
+        var PagePath = [[${page}]]
+        var pageParameter = [[${parameter}]]
+    </script>
+</head>
+<body>
+<div id="vue-container" class="full-height">
+    <vue-main/>
+</div>
+
+
+<!--引入layer-->
+<div th:if="${userLayer == 'true'}">
+    <div th:replace="common/common-resources :: common-resources-layerJS"></div>
+</div>
+<!--引入axios-->
+<div th:replace="common/common-resources :: common-resources-axios"></div>
+<!--引入vue-->
+<div th:replace="common/common-resources :: common-resources-vue"></div>
+<!--引入ant-->
+<div th:replace="common/common-resources :: common-resources-ant-js"></div>
+
+<div th:replace="common/common-resources :: common-resources-requireJS"></div>
+<script th:src="@{/js/common/common.js}"></script>
+<!--引入页面js-->
+
+<script type="text/javascript" th:inline="javascript">
+    ready(function () {
+        require([PagePath, 'common/utils/ModuleLoader'], function (module) {
+            var page = new module.default()
+            page.init()
+        })
+    })
+</script>
+</body>
+</html>

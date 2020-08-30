@@ -1,0 +1,81 @@
+.sider {
+  &.ant-fixed-sidemenu {
+    position: fixed;
+    height: 100%;
+  }
+  // logo样式
+  .system-logo {
+    position: relative;
+    height: 64px;
+    padding-left: 24px;
+    overflow: hidden;
+    line-height: 64px;
+    background: #002140;
+    transition: all .3s;
+
+    img,
+    svg,
+    h1 {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    img,
+    svg {
+      height: 32px;
+      width: 32px;
+    }
+
+    h1 {
+      color: #fff;
+      font-size: 20px;
+      margin: 0 0 0 12px;
+      font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
+      font-weight: 600;
+      vertical-align: middle;
+    }
+  }
+}
+
+.header-animat{
+  position: relative;
+  z-index: 105;
+}
+
+.layout .ant-layout {
+  .header {
+    height: 64px;
+    padding: 0 12px 0 0;
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+    position: relative;
+  }
+  // 侧边栏缩进开发按钮样式
+  .trigger {
+    font-size: 20px;
+    line-height: 64px;
+    padding: 0 24px;
+    cursor: pointer;
+    transition: color 0.3s;
+    &:hover {
+      background: rgba(0, 0, 0, 0.025);
+    }
+  }
+}
+
+.ant-pro-multi-tab {
+  margin: -23px -24px 24px -24px;
+  background: #ffffff;
+}
+
+.page-container {
+  .page-frame.active {
+    display: block;
+  }
+  .page-frame {
+    display: none;
+    width: 100%;
+    height: calc(100vh - 97px);
+    border-width: 0;
+  }
+}
