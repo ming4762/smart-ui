@@ -32,11 +32,11 @@ export default {
 	template: `
 	<div class="page-container">
       <iframe
-        :class="menu.id === activeMenu.id ? 'active' : ''"
+        :class="menu.key === activeMenu.key ? 'active' : ''"
         class="animation-fade page-frame"
         v-for="menu in openMenuList"
         :src="getMenuPath(menu)"
-        :key="menu.id"/>
+        :key="menu.key"/>
 	</div>
 	`
 }
