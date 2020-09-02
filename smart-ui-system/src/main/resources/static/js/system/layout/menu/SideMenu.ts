@@ -1,4 +1,7 @@
 // @ts-ignore
+import TreeUtils from 'common/utils/TreeUtils'
+
+// @ts-ignore
 import SMenu from 'system/layout/menu/SMenu'
 
 /**
@@ -37,41 +40,6 @@ export default {
     SMenu: SMenu,
     Logo
   },
-  data () {
-    return {
-      menuList: [
-        {
-          key: 1,
-          title: '测试1',
-          children: []
-        },
-        {
-          key: 2,
-          title: '测试2',
-        },
-        {
-          key: 3,
-          title: '测试3',
-          children: [
-            {
-              key: 31,
-              title: '测试3-1',
-              children: [
-                {
-                  key: 32,
-                  title: '测试3-1-1',
-                },
-                {
-                  key: 33,
-                  title: '测试3-1-2',
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  },
   props: {
     mode: {
       type: String,
@@ -89,6 +57,16 @@ export default {
       default: false
     }
   },
+  data () {
+    return {
+    }
+  },
+  computed: {
+    computedUserMenuTree () {
+      const userMenuList = window.busVue.userMenuList || []
+      return TreeUtils.convertList2Tree(userMenuList, ['key', 'parentKey'], 0)
+    }
+  },
   // language=html
   template: `
 <a-layout-sider
@@ -98,7 +76,7 @@ export default {
   :collapsible="collapsible"
   :trigger="null">
   <Logo/>
-  <SMenu style="padding: 16px 0" :menuList="menuList"></SMenu>
+  <SMenu style="padding: 16px 0" :menuList="computedUserMenuTree"></SMenu>
 </a-layout-sider>
   `
 }

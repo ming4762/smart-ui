@@ -1,5 +1,6 @@
 import MainHeader from 'system/layout/main/MainHeader'
-import MultiTab from 'system/layout/main//MultiTab'
+import MultiTab from 'system/layout/main/MultiTab'
+import PageContainer from 'system/layout/main/PageContainer'
 /**
  * 主体部分
  * @author shizhongming
@@ -9,11 +10,18 @@ import MultiTab from 'system/layout/main//MultiTab'
 export default {
 	components: {
 		MainHeader,
-		MultiTab
+		MultiTab,
+		PageContainer
 	},
 	data () {
 		return {
 			fixedHeader: true
+		}
+	},
+	computed: {
+		// 消息总线
+		computedBus () {
+			return window.busVue
 		}
 	},
 	// language=html
@@ -22,8 +30,11 @@ export default {
 				<!--		头部		-->
 				<MainHeader/>
 				<!--		主体		-->
-				<a-layout-content :style="{ height: '100%', margin: '24px 24px 0', paddingTop: fixedHeader ? '0' : '0' }">
+				<a-layout-content :style="{  margin: '24px 15px 0', paddingTop: fixedHeader ? '0' : '0' }">
 						<MultiTab/>
+						<PageContainer
+							:activeMenu="computedBus.activeMenu"
+							:openMenuList="computedBus.openMenuList"/>
 				</a-layout-content>
 		</a-layout>
 	`

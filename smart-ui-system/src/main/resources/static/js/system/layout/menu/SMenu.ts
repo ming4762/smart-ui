@@ -35,6 +35,10 @@ const subMenu = {
 	`
 }
 
+function getLeafMenuTemplate (menu: any): any {
+
+}
+
 export default {
 	components: {
 		SubMenu: subMenu
@@ -45,6 +49,11 @@ export default {
 			default: () => ([])
 		}
 	},
+	computed: {
+		computedBus () {
+			return window.busVue
+		},
+	},
 	methods: {
 		/**
 		 * 是否有下级
@@ -52,39 +61,49 @@ export default {
 		 */
 		hasChildren (menu: any): boolean {
 			return menu.children && menu.children.length > 0
+		},
+		/**
+		 * 点击菜单
+		 */
+		handleClickMenu ({ key }: any) {
+			// @ts-ignore
+			this.computedBus.addMenu(key)
 		}
+	},
+	mounted () {
 	},
 	// language=html
 	template: `
 <a-menu
   mode="inline"
+	@click="handleClickMenu"
   theme="dark">
 	<template
 		v-for="item in menuList">
       <a-menu-item v-if="!hasChildren(item)" :key="item.key">
-        <a-icon type="pie-chart" />
+        <a-icon :type="item.icon" />
         <span>{{ item.title }}</span>
       </a-menu-item>
 			<a-sub-menu
 				v-else
 				:key="item.key">
 				<span slot="title">
-			    <a-icon type="mail" />
+			    <a-icon :type="item.icon" />
 					<span>{{ item.title }}</span>
 			  </span>
 				<template v-for="menu2 in item.children">
             <a-menu-item v-if="!hasChildren(menu2)" :key="menu2.key">
-                <a-icon type="pie-chart" />
+                <a-icon :type="menu2.icon" />
                 <span>{{ menu2.title }}</span>
             </a-menu-item>
 						<a-sub-menu v-else :key="menu2.key">
 								<span slot="title">
-							    <a-icon type="mail" />
+							    <a-icon :type="menu2.icon" />
 									<span>{{ menu2.title }}</span>
 							  </span>
 								<template v-for="menu3 in menu2.children">
                     <a-menu-item v-if="!hasChildren(menu3)" :key="menu3.key">
-                        <a-icon type="pie-chart" />
+                        <a-icon :type="menu3.icon" />
                         <span>{{ menu3.title }}</span>
                     </a-menu-item>
 								</template>

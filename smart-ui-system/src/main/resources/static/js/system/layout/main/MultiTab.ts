@@ -6,7 +6,7 @@
 export default {
 	// language=html
 	template: `
-		<div class="ant-pro-multi-tab">
+		<div style="margin-bottom: 15px; margin-left: -15px" class="ant-pro-multi-tab">
 				<div class="ant-pro-multi-tab-wrapper">
             <a-tabs
               type="editable-card"

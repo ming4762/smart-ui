@@ -7,6 +7,16 @@ export default {
 	computed: {
 		computedBus () {
 			return window.busVue
+		},
+		computedStyle () {
+			return {
+				padding: '0',
+				right: '0',
+				position: 'fixed',
+				top: '0',
+				// @ts-ignore
+				width: `calc(100% - ${this.computedBus.sidebar.opened ? '256' : '80'}px)`
+			}
 		}
 	},
 	methods: {
@@ -19,8 +29,10 @@ export default {
 	template: `
 	<transition>
 			<div class="header-animat">
+					<a-layout-header/>
 					<a-layout-header
-            :style="{ padding: '0' }">
+						:class="['ant-pro-fixed-header']"
+            :style="computedStyle">
 						<div class="header">
               <a-icon class="trigger" :type="computedBus.sidebar.opened ? 'menu-fold' : 'menu-unfold'" @click="toggle"/>
 						</div>	
