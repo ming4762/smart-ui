@@ -26,9 +26,23 @@ define(["require", "exports"], function (require, exports) {
                 default: function () { return ([]); }
             }
         },
+        data: function () {
+            return {
+                selectedKeys: []
+            };
+        },
+        mounted: function () {
+        },
         computed: {
             computedBus: function () {
                 return window.busVue;
+            },
+            computedActiveKeys: function () {
+                var activeMenu = this.computedBus.activeMenu;
+                var keys = [];
+                if (activeMenu.key) {
+                    keys.push(activeMenu.key);
+                }
             },
         },
         methods: {
@@ -39,8 +53,6 @@ define(["require", "exports"], function (require, exports) {
                 var key = _a.key;
                 this.computedBus.addMenu(key);
             }
-        },
-        mounted: function () {
         },
         template: "\n<a-menu\n  mode=\"inline\"\n\t@click=\"handleClickMenu\"\n  theme=\"dark\">\n\t<template\n\t\tv-for=\"item in menuList\">\n      <a-menu-item v-if=\"!hasChildren(item)\" :key=\"item.key\">\n        <a-icon :type=\"item.icon\" />\n        <span>{{ item.title }}</span>\n      </a-menu-item>\n\t\t\t<a-sub-menu\n\t\t\t\tv-else\n\t\t\t\t:key=\"item.key\">\n\t\t\t\t<span slot=\"title\">\n\t\t\t    <a-icon :type=\"item.icon\" />\n\t\t\t\t\t<span>{{ item.title }}</span>\n\t\t\t  </span>\n\t\t\t\t<template v-for=\"menu2 in item.children\">\n            <a-menu-item v-if=\"!hasChildren(menu2)\" :key=\"menu2.key\">\n                <a-icon :type=\"menu2.icon\" />\n                <span>{{ menu2.title }}</span>\n            </a-menu-item>\n\t\t\t\t\t\t<a-sub-menu v-else :key=\"menu2.key\">\n\t\t\t\t\t\t\t\t<span slot=\"title\">\n\t\t\t\t\t\t\t    <a-icon :type=\"menu2.icon\" />\n\t\t\t\t\t\t\t\t\t<span>{{ menu2.title }}</span>\n\t\t\t\t\t\t\t  </span>\n\t\t\t\t\t\t\t\t<template v-for=\"menu3 in menu2.children\">\n                    <a-menu-item v-if=\"!hasChildren(menu3)\" :key=\"menu3.key\">\n                        <a-icon :type=\"menu3.icon\" />\n                        <span>{{ menu3.title }}</span>\n                    </a-menu-item>\n\t\t\t\t\t\t\t\t</template>\n\t\t\t\t\t\t</a-sub-menu>\n\t\t\t\t</template>\n\t\t\t</a-sub-menu>\n\t</template>\t\n</a-menu>\n\t"
     };

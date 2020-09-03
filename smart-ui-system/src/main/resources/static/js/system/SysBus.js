@@ -32,7 +32,7 @@ define(["require", "exports", "common/utils/StoreUtil", "system/constants/Consta
                             _this.setActiveMenu(menu);
                         }
                         var notHasMenu = _this.openMenuList.every(function (value) {
-                            return value.path !== menu.path;
+                            return value.key !== menu.key;
                         });
                         if (notHasMenu) {
                             _this.openMenuList.push(menu);

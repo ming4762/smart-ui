@@ -54,8 +54,7 @@ const initBus = () => {
 					// 判断菜单是否已经存在
 					// @ts-ignore
 					const notHasMenu: boolean = this.openMenuList.every((value: any) => {
-						// todo 待确认
-						return value.path !== menu.path;
+						return value.key !== menu.key;
 					})
 					if (notHasMenu) {
 						// @ts-ignore

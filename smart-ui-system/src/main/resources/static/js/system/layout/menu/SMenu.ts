@@ -49,10 +49,30 @@ export default {
 			default: () => ([])
 		}
 	},
+	data () {
+		return {
+			selectedKeys: []
+		}
+	},
+	mounted () {
+
+	},
 	computed: {
 		computedBus () {
 			return window.busVue
 		},
+		/**
+		 * 激活的菜单
+		 */
+		computedActiveKeys () {
+			// @ts-ignore
+			const activeMenu: any = this.computedBus.activeMenu
+			const keys = []
+			if (activeMenu.key) {
+				keys.push(activeMenu.key)
+			}
+		},
+
 	},
 	methods: {
 		/**
@@ -70,9 +90,6 @@ export default {
 			this.computedBus.addMenu(key)
 		}
 	},
-	mounted () {
-	},
-	// language=html
 	template: `
 <a-menu
   mode="inline"
