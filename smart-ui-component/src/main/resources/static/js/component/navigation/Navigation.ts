@@ -14,8 +14,8 @@ export default {
 	// language=html
 	template: `
 	<div class="content-tabs">
-			<button>
-          <a-icon type="backward" />
+			<button class="roll-nav roll-left">
+          <a-icon type="backward"/>
 			</button>
 	</div>
 	`

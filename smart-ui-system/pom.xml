@@ -22,5 +22,11 @@
             <version>${smart-ui.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.smart</groupId>
+            <artifactId>smart-ui-component</artifactId>
+            <version>${smart-ui.version}</version>
+        </dependency>
+
     </dependencies>
 </project>
