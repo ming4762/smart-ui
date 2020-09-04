@@ -1,3 +1,10 @@
+.content-tabs {
+  border-bottom: solid 2px #2f4050;
+  position: relative;
+  height: 42px;
+  background: #fafafa;
+  line-height: 40px;
+}
 .content-tabs .roll-nav {
   position: absolute;
   width: 40px;
@@ -6,5 +13,20 @@
   color: #999;
   z-index: 2;
   top: 0;
+}
+.content-tabs .roll-left {
+  left: 0;
+  border-right: solid 1px #eee;
+}
+.content-tabs button {
+  background: #fff;
+  border: 0;
+  height: 40px;
+  width: 40px;
+  outline: none;
+  cursor: pointer;
+}
+.content-tabs .roll-nav :hover {
+  background-color: red;
 }
 /*# sourceMappingURL=navigation.css.map */
