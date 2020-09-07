@@ -6,14 +6,9 @@
     <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title th:text="${title}">主页</title>
 
-    <!--引入element ui-->
     <div th:replace="common/common-resources :: common-resources-ant-css"></div>
     <link rel="stylesheet" th:href="@{/css/common/common.css}"/>
     <div th:replace="common/common-resources :: common-resources-contextPath"></div>
-
-    <!--<script th:src="@{/js/plugins/arcgis/vue-arcgis2.umd.min.js}"></script>-->
-    <link rel="stylesheet" th:href="@{/css/system/home/home.css}"/>
-    <link rel="stylesheet" th:href="@{/css/component/navigation.css}"/>
 
 </head>
 
@@ -35,9 +30,9 @@
 
 <script type="text/javascript" th:inline="javascript">
     ready(function () {
-        require(['js/system/home/HomePage'], function (module) {
+        require(['js/system/pages/login/LoginPage'], function (module) {
             var page = new module.default()
-            page.initPage()
+            page.init()
         })
     })
 </script>

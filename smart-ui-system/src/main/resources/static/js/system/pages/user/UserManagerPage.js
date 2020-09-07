@@ -11,7 +11,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-define(["require", "exports", "common/PageBuilder"], function (require, exports, PageBuilder_1) {
+define(["require", "exports", "js/common/utils/ModuleLoader", "js/common/PageBuilder", "js/common/utils/ApiService"], function (require, exports, ModuleLoader_1, PageBuilder_1, ApiService_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var UserManagerPage = (function (_super) {
@@ -19,6 +19,12 @@ define(["require", "exports", "common/PageBuilder"], function (require, exports,
         function UserManagerPage() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
+        UserManagerPage.prototype.init = function () {
+            var _this = this;
+            ModuleLoader_1.default(['vue-ant-table']).then(function () {
+                _this.initVue();
+            });
+        };
         UserManagerPage.prototype.build = function () {
             return page;
         };
@@ -26,6 +32,17 @@ define(["require", "exports", "common/PageBuilder"], function (require, exports,
     }(PageBuilder_1.default));
     exports.default = UserManagerPage;
     var page = {
-        template: "\n\t<div style=\"height: 1000px\">\n\t\t\u8FD9\u662F\u7528\u6237\u7BA1\u7406\u9875\u9762\n\t</div>\n\t"
+        data: function () {
+            return {
+                columns: [
+                    {
+                        label: '用户名',
+                        prop: 'username'
+                    }
+                ],
+                apiService: ApiService_1.default
+            };
+        },
+        template: "\n\t<div style=\"padding: 10px; background:  rgba(0, 21, 41, 0.08)\" >\n      <div style=\"height: 1000px; background: white; overflow:auto\">\n          <s-table-crud\n          \t:keys=\"['userId']\"\n\t          size=\"middle\"\n            showIndex\n\t          :api-service=\"apiService\"\n            query-url=\"sys/user/list\"\n            text-row-button\n\t          :bordered=\"false\"\n            :columns=\"columns\"></s-table-crud>\n      </div>\t\n\t</div>\n\t"
     };
 });

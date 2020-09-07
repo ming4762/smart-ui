@@ -15,8 +15,18 @@ import java.util.Map;
 @Controller
 public class UiSystemController {
 
+    /**
+     * 主页
+     * @param parameter 参数
+     * @return modelview
+     */
     @RequestMapping("home")
     public ModelAndView home(@RequestParam Map<String, String> parameter) {
         return new ModelAndView("system/home", parameter);
+    }
+
+    @RequestMapping("login")
+    public ModelAndView login(@RequestParam Map<String, String> parameter) {
+        return new ModelAndView("system/login", parameter);
     }
 }

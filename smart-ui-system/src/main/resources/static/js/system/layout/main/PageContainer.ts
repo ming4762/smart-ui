@@ -15,9 +15,6 @@ export default {
 		}
 	},
 	watch: {
-		openMenuList () {
-			console.log(this.openMenuList)
-		}
 	},
 	methods: {
 		/**

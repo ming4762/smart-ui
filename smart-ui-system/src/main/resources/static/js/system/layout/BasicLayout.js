@@ -3,47 +3,47 @@ define(["require", "exports", "system/layout/menu/SideMenu", "system/layout/main
     Object.defineProperty(exports, "__esModule", { value: true });
     var testUserMenuList = [
         {
-            key: 1,
+            key: '1',
             title: '系统管理',
             icon: 'setting',
-            parentKey: 0
+            parentKey: '0'
         },
         {
-            key: 2,
+            key: '2',
             title: '用户管理',
             icon: 'user',
             path: '/ui/common?page=system/pages/user/UserManagerPage',
-            parentKey: 1
+            parentKey: '1'
         },
         {
-            key: 3,
+            key: '3',
             title: '测试2',
             icon: 'setting',
-            parentKey: 0
+            parentKey: '0'
         },
         {
-            key: 4,
+            key: '4',
             title: '测试3',
             icon: 'setting',
-            parentKey: 0
+            parentKey: '0'
         },
         {
-            key: 5,
+            key: '5',
             title: '测试3-1',
             icon: 'setting',
-            parentKey: 4
+            parentKey: '4'
         },
         {
-            key: 6,
+            key: '6',
             title: '测试3-1-1',
             icon: 'setting',
-            parentKey: 5
+            parentKey: '5'
         },
         {
-            key: 7,
+            key: '7',
             title: '测试3-1-2',
             icon: 'setting',
-            parentKey: 5
+            parentKey: '5'
         },
     ];
     exports.default = {

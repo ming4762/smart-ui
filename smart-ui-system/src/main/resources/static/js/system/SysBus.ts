@@ -73,6 +73,60 @@ const initBus = () => {
 				// @ts-ignore
 				this.activeMenu = menu
 				StoreUtil.setStore(STORE_KEYS.ACTIVE_MENU, menu, StoreUtil.SESSION_TYPE)
+			},
+			/**
+			 * 关闭全部菜单
+			 */
+			removeAllMenu (removeCurrent: boolean = true): Promise<any> {
+				return new Promise<any>(() => {
+					// @ts-ignore
+					if (this.openMenuList.length > 1) {
+						const menuList = []
+						// @ts-ignore
+						menuList.push(this.openMenuList[0])
+						// @ts-ignore
+						if (!removeCurrent && this.openMenuList[0].key !== this.activeMenu.key) {
+							// @ts-ignore
+							menuList.push(this.activeMenu)
+						}
+						// 如果移除当前，则设置激活菜单为第一个
+						if (removeCurrent) {
+							this.setActiveMenu(menuList[0])
+						}
+						// 设置菜单
+						// @ts-ignore
+						this.openMenuList = menuList
+						StoreUtil.setStore(STORE_KEYS.OPEN_MENU_LIST, menuList, StoreUtil.SESSION_TYPE)
+					}
+				})
+			},
+			/**
+			 * 移除菜单
+			 * @param menuKey 菜单的key
+			 */
+			removeMenu (menuKey: string): Promise<any> {
+				return new Promise<any>(() => {
+					// @ts-ignore
+					for (let i=0; i<this.openMenuList.length; i++) {
+						// @ts-ignore
+						const menu = this.openMenuList[i]
+						if (menu.key === menuKey) {
+							// @ts-ignore
+							this.openMenuList.splice(i, 1)
+							break
+						}
+					}
+					// @ts-ignore
+					StoreUtil.setStore(STORE_KEYS.OPEN_MENU_LIST, this.openMenuList, StoreUtil.SESSION_TYPE)
+					// 如果关闭的是激活的菜单，则设置下一个激活的菜单
+					// @ts-ignore
+					if (this.activeMenu.key === menuKey) {
+						// @ts-ignore
+						const activeMenu = this.openMenuList.slice(-1)[0]
+						// 设置激活的菜单 TODO: 判断activeMenu是否存在
+						this.setActiveMenu(activeMenu)
+					}
+				})
 			}
 		}
 	})

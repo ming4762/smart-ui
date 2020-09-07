@@ -22,6 +22,13 @@ export default {
 		// 消息总线
 		computedBus () {
 			return window.busVue
+		},
+		/**
+		 * 打开的菜单
+		 */
+		computedOpenMenuList () {
+			// @ts-ignore
+			return this.computedBus.openMenuList
 		}
 	},
 	// language=html
@@ -30,8 +37,9 @@ export default {
 				<!--		头部		-->
 				<MainHeader/>
 				<!--		主体		-->
-				<a-layout-content :style="{  margin: '24px 15px 0', paddingTop: fixedHeader ? '0' : '0' }">
-						<MultiTab/>
+				<a-layout-content :style="{  margin: '24px 0 0', paddingTop: fixedHeader ? '0' : '0' }">
+						<MultiTab
+							:menuList="computedOpenMenuList"/>
 						<PageContainer
 							:activeMenu="computedBus.activeMenu"
 							:openMenuList="computedBus.openMenuList"/>

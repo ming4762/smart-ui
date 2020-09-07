@@ -64,7 +64,7 @@ export default {
   computed: {
     computedUserMenuTree () {
       const userMenuList = window.busVue.userMenuList || []
-      return TreeUtils.convertList2Tree(userMenuList, ['key', 'parentKey'], 0)
+      return TreeUtils.convertList2Tree(userMenuList, ['key', 'parentKey'], '0')
     }
   },
   // language=html

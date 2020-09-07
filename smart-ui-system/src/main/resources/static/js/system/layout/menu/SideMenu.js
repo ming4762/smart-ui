@@ -44,7 +44,7 @@ define(["require", "exports", "common/utils/TreeUtils", "system/layout/menu/SMen
         computed: {
             computedUserMenuTree: function () {
                 var userMenuList = window.busVue.userMenuList || [];
-                return TreeUtils_1.default.convertList2Tree(userMenuList, ['key', 'parentKey'], 0);
+                return TreeUtils_1.default.convertList2Tree(userMenuList, ['key', 'parentKey'], '0');
             }
         },
         template: "\n<a-layout-sider\n  :class=\"['sider', 'ant-fixed-sidemenu']\"\n  width=\"256px\"\n  v-model=\"collapsed\"\n  :collapsible=\"collapsible\"\n  :trigger=\"null\">\n  <Logo/>\n  <SMenu style=\"padding: 16px 0\" :menuList=\"computedUserMenuTree\"></SMenu>\n</a-layout-sider>\n  "

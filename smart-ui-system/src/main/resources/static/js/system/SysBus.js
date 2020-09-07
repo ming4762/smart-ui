@@ -43,6 +43,41 @@ define(["require", "exports", "common/utils/StoreUtil", "system/constants/Consta
                 setActiveMenu: function (menu) {
                     this.activeMenu = menu;
                     StoreUtil_1.default.setStore(Constants_1.STORE_KEYS.ACTIVE_MENU, menu, StoreUtil_1.default.SESSION_TYPE);
+                },
+                removeAllMenu: function (removeCurrent) {
+                    var _this = this;
+                    if (removeCurrent === void 0) { removeCurrent = true; }
+                    return new Promise(function () {
+                        if (_this.openMenuList.length > 1) {
+                            var menuList = [];
+                            menuList.push(_this.openMenuList[0]);
+                            if (!removeCurrent && _this.openMenuList[0].key !== _this.activeMenu.key) {
+                                menuList.push(_this.activeMenu);
+                            }
+                            if (removeCurrent) {
+                                _this.setActiveMenu(menuList[0]);
+                            }
+                            _this.openMenuList = menuList;
+                            StoreUtil_1.default.setStore(Constants_1.STORE_KEYS.OPEN_MENU_LIST, menuList, StoreUtil_1.default.SESSION_TYPE);
+                        }
+                    });
+                },
+                removeMenu: function (menuKey) {
+                    var _this = this;
+                    return new Promise(function () {
+                        for (var i = 0; i < _this.openMenuList.length; i++) {
+                            var menu = _this.openMenuList[i];
+                            if (menu.key === menuKey) {
+                                _this.openMenuList.splice(i, 1);
+                                break;
+                            }
+                        }
+                        StoreUtil_1.default.setStore(Constants_1.STORE_KEYS.OPEN_MENU_LIST, _this.openMenuList, StoreUtil_1.default.SESSION_TYPE);
+                        if (_this.activeMenu.key === menuKey) {
+                            var activeMenu = _this.openMenuList.slice(-1)[0];
+                            _this.setActiveMenu(activeMenu);
+                        }
+                    });
                 }
             }
         });

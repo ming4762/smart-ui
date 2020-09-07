@@ -12,11 +12,7 @@ define(["require", "exports"], function (require, exports) {
                 required: true
             }
         },
-        watch: {
-            openMenuList: function () {
-                console.log(this.openMenuList);
-            }
-        },
+        watch: {},
         methods: {
             getMenuPath: function (menu) {
                 return menu.path;
