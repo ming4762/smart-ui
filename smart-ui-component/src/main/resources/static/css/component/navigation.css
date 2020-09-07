@@ -1,3 +1,7 @@
+/**
+  tab样式
+  @author shizhongming
+ */
 .content-tabs {
   border-bottom: solid 2px #2f4050;
   position: relative;
@@ -18,15 +22,68 @@
   left: 0;
   border-right: solid 1px #eee;
 }
-.content-tabs button {
+.content-tabs .roll-right {
+  right: 0;
+  border-left: solid 1px #eee;
+}
+.content-tabs .roll-right.J_tabRight {
+  right: 113px;
+}
+.content-tabs .roll-right.btn-group {
+  right: 28px;
+  width: 85px;
+  padding: 0 4px;
+  cursor: pointer;
+  background-color: #FFFFFF;
+}
+.content-tabs .roll-right.btn-group:hover {
+  color: #777777;
+  background-color: #F2F2F2;
+}
+.content-tabs .direction-button {
   background: #fff;
-  border: 0;
   height: 40px;
   width: 40px;
   outline: none;
   cursor: pointer;
 }
-.content-tabs .roll-nav :hover {
-  background-color: red;
+.content-tabs .direction-button:hover {
+  color: #777777;
+  background-color: #F2F2F2;
+}
+.content-tabs nav.page-tabs {
+  margin-left: 40px;
+  width: 10000px;
+  height: 40px;
+  overflow: hidden;
+}
+.content-tabs nav.page-tabs .page-tabs-content {
+  float: left;
+}
+.ant-dropdown-menu .ant-divider.ant-divider-horizontal {
+  margin: 5px 0 !important;
+}
+.page-tabs a {
+  display: block;
+  color: #999;
+  float: left;
+  border-right: solid 1px #eee;
+  padding: 0 15px;
+}
+.page-tabs a.active {
+  background: #2f4050;
+  color: #a7b1c2;
+}
+.page-tabs a.active:hover {
+  color: #FFFFFF;
+  background-color: #2A3846;
+}
+.page-tabs a:hover {
+  color: #777777;
+  background-color: #F2F2F2;
+}
+.J_menuTab {
+  -webkit-transition: all 0.3s ease-out 0s;
+  transition: all 0.3s ease-out 0s;
 }
 /*# sourceMappingURL=navigation.css.map */
