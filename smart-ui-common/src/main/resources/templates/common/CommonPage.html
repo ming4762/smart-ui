@@ -41,7 +41,7 @@
 
 <script type="text/javascript" th:inline="javascript">
     ready(function () {
-        require([PagePath, 'common/utils/ModuleLoader'], function (module) {
+        require([PagePath], function (module) {
             var page = new module.default()
             page.init()
         })

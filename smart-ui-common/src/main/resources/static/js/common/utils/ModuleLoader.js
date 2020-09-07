@@ -45,9 +45,21 @@ define(["require", "exports", "./CommonUtils"], function (require, exports, Comm
                 'js/plugins/vue-echarts/vue-echarts.umd.min.js'
             ]
         },
+        'vue-ant-table': {
+            name: 'ue-ant-table',
+            js: [
+                '/../../plugins/vue-ant-table/vue-ant-table.umd.js'
+            ],
+            css: [
+                'plugins/vue-ant-table/vue-ant-table.css'
+            ]
+        }
     };
-    var getPath = CommonUtils_1.default.withContextPath;
-    var loadModule = function (moduleName) {
+    var getPath = function (path) {
+        return contextPath + "/js/" + path;
+    };
+    var loadModule = function (moduleName, amd) {
+        if (amd === void 0) { amd = true; }
         var module = moduleMap[moduleName];
         if (!module) {
             console.warn('模块加载失败，未找到模块');
@@ -55,44 +67,44 @@ define(["require", "exports", "./CommonUtils"], function (require, exports, Comm
         }
         if (module['css'] && module['css'].length > 0) {
             var cssPaths = module['css'].map(function (item) {
-                return getPath(item);
+                return "" + contextPath + item;
             });
             CommonUtils_1.default.loadCSS.apply(CommonUtils_1.default, cssPaths);
         }
-        var jsList = module.js.map(function (item) { return getPath(item); });
-        return CommonUtils_1.default.loadJS.apply(CommonUtils_1.default, jsList);
+        if (module.js.length === 0) {
+            return new Promise(function () { });
+        }
+        if (!amd) {
+            var jsList = module.js.map(function (item) { return getPath(item); });
+            return CommonUtils_1.default.loadJS.apply(CommonUtils_1.default, jsList);
+        }
+        else {
+            return Promise.all(module.js.map(function (item) {
+                return new Promise(function (resolve_1, reject_1) { require([item], resolve_1, reject_1); });
+            }));
+        }
     };
     window.loadMoules = [];
-    window.smartModuleLoader = function () {
-        var moduleNames = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            moduleNames[_i] = arguments[_i];
-        }
+    var moduleLoader = function (moduleNames, amd) {
+        if (amd === void 0) { amd = true; }
         return __awaiter(void 0, void 0, void 0, function () {
-            var _a, moduleNames_1, moduleName;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        _a = 0, moduleNames_1 = moduleNames;
-                        _b.label = 1;
-                    case 1:
-                        if (!(_a < moduleNames_1.length)) return [3, 5];
-                        moduleName = moduleNames_1[_a];
-                        if (!(window['loadMoules'].indexOf(moduleName) === -1)) return [3, 3];
-                        return [4, loadModule(moduleName)];
-                    case 2:
-                        _b.sent();
+            var promises, _i, moduleNames_1, moduleName;
+            return __generator(this, function (_a) {
+                promises = [];
+                for (_i = 0, moduleNames_1 = moduleNames; _i < moduleNames_1.length; _i++) {
+                    moduleName = moduleNames_1[_i];
+                    if (window['loadMoules'].indexOf(moduleName) === -1) {
                         window['loadMoules'].push(moduleName);
-                        return [3, 4];
-                    case 3:
+                        promises.push(loadModule(moduleName));
+                    }
+                    else {
                         console.warn(moduleName + "\u5DF2\u52A0\u8F7D\uFF0C\u8BF7\u52FF\u91CD\u590D\u52A0\u8F7D");
-                        _b.label = 4;
-                    case 4:
-                        _a++;
-                        return [3, 1];
-                    case 5: return [2];
+                    }
                 }
+                return [2, Promise.all(promises)];
             });
         });
     };
+    window.smartModuleLoader = moduleLoader;
+    exports.default = moduleLoader;
 });

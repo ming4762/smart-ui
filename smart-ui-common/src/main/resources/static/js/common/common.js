@@ -1,9 +1,9 @@
 if (window.requirejs) {
   requirejs.config({
-    baseUrl: '../../js/'
+    baseUrl: '../../'
   })
   require.config({
-    baseUrl: '../../js/'
+    baseUrl: '../../'
   })
 }
 function ready(fn){
