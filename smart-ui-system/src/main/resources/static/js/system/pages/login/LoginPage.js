@@ -11,7 +11,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-define(["require", "exports", "common/PageBuilder"], function (require, exports, PageBuilder_1) {
+define(["require", "exports", "js/common/PageBuilder"], function (require, exports, PageBuilder_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var LoginPage = (function (_super) {
@@ -20,12 +20,13 @@ define(["require", "exports", "common/PageBuilder"], function (require, exports,
             return _super !== null && _super.apply(this, arguments) || this;
         }
         LoginPage.prototype.build = function () {
+            console.log('=====');
             return page;
         };
         return LoginPage;
     }(PageBuilder_1.default));
     exports.default = LoginPage;
     var page = {
-        template: "\n    <div>\n        <span>\n            abc\n        </span>\n    </div>\n    "
+        template: "\n\t<div>\n\t\t\t\u8FD9\u662F\u767B\u5F55\u9875daffa\n\t</div>\t\n\t"
     };
 });
