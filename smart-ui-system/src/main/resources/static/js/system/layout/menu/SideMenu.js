@@ -1,4 +1,4 @@
-define(["require", "exports", "common/utils/TreeUtils", "system/layout/menu/SMenu"], function (require, exports, TreeUtils_1, SMenu_1) {
+define(["require", "exports", "js/common/utils/TreeUtils", "./SMenu"], function (require, exports, TreeUtils_1, SMenu_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var Logo = {

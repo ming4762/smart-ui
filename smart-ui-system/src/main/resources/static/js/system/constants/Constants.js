@@ -4,6 +4,9 @@ define(["require", "exports"], function (require, exports) {
     exports.STORE_KEYS = void 0;
     exports.STORE_KEYS = {
         OPEN_MENU_LIST: 'smart_open_menu_list',
-        USER_MENU_LIST: 'smart_user_menu_list'
+        USER_MENU_LIST: 'smart_user_menu_list',
+        USER_KEY: 'smart_user_data',
+        USER_ROLES: 'smart_user_roles',
+        USER_PERMISSIONS: 'smart_user_permission'
     };
 });

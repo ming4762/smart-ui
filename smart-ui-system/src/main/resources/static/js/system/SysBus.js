@@ -1,4 +1,4 @@
-define(["require", "exports", "common/utils/StoreUtil", "system/constants/Constants"], function (require, exports, StoreUtil_1, Constants_1) {
+define(["require", "exports", "js/common/utils/StoreUtil", "js/system/constants/Constants"], function (require, exports, StoreUtil_1, Constants_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var debug = true;

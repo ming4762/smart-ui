@@ -1,8 +1,8 @@
 // @ts-ignore
-import TreeUtils from 'common/utils/TreeUtils'
+import TreeUtils from 'js/common/utils/TreeUtils'
 
 // @ts-ignore
-import SMenu from 'system/layout/menu/SMenu'
+import SMenu from './SMenu'
 
 /**
  * logo组件

@@ -1,6 +1,6 @@
-import MainHeader from 'system/layout/main/MainHeader'
-import MultiTab from 'system/layout/main/MultiTab'
-import PageContainer from 'system/layout/main/PageContainer'
+import MainHeader from './MainHeader'
+import MultiTab from './MultiTab'
+import PageContainer from './PageContainer'
 /**
  * 主体部分
  * @author shizhongming

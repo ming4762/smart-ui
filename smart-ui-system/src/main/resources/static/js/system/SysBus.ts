@@ -1,7 +1,7 @@
 // @ts-ignore
-import StoreUtil from 'common/utils/StoreUtil'
+import StoreUtil from 'js/common/utils/StoreUtil'
 
-import { STORE_KEYS } from 'system/constants/Constants'
+import { STORE_KEYS } from 'js/system/constants/Constants'
 
 declare const Vue: any
 

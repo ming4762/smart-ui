@@ -1,7 +1,7 @@
-import SideMenu from 'system/layout/menu/SideMenu'
-import MainLayout from 'system/layout/main/MainLayout'
+import SideMenu from 'js/system/layout/menu/SideMenu'
+import MainLayout from 'js/system/layout/main/MainLayout'
 
-import ThemeMixins from 'system/mixins/ThemeMixins'
+import ThemeMixins from 'js/system/mixins/ThemeMixins'
 
 const testUserMenuList: Array<any> = [
 	{

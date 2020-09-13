@@ -1,4 +1,4 @@
-define(["require", "exports", "system/layout/main/MainHeader", "system/layout/main/MultiTab", "system/layout/main/PageContainer"], function (require, exports, MainHeader_1, MultiTab_1, PageContainer_1) {
+define(["require", "exports", "./MainHeader", "./MultiTab", "./PageContainer"], function (require, exports, MainHeader_1, MultiTab_1, PageContainer_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = {

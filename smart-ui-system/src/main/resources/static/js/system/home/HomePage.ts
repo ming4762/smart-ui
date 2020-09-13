@@ -1,8 +1,8 @@
 // @ts-ignore
-import PageBuilder from 'common/PageBuilder'
-import initBus from 'system/SysBus'
+import PageBuilder from 'js/common/PageBuilder'
+import initBus from 'js/system/SysBus'
 
-import BasicLayout from 'system/layout/BasicLayout'
+import BasicLayout from 'js/system/layout/BasicLayout'
 
 declare global {
     interface Window {

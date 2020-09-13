@@ -1,5 +1,5 @@
 // @ts-ignore
-import Navigation from 'component/navigation/Navigation'
+import Navigation from 'js/component/navigation/Navigation'
 
 /**
  *

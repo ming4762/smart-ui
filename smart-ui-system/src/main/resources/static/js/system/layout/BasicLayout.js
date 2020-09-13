@@ -1,4 +1,4 @@
-define(["require", "exports", "system/layout/menu/SideMenu", "system/layout/main/MainLayout", "system/mixins/ThemeMixins"], function (require, exports, SideMenu_1, MainLayout_1, ThemeMixins_1) {
+define(["require", "exports", "js/system/layout/menu/SideMenu", "js/system/layout/main/MainLayout", "js/system/mixins/ThemeMixins"], function (require, exports, SideMenu_1, MainLayout_1, ThemeMixins_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var testUserMenuList = [

@@ -1,4 +1,4 @@
-define(["require", "exports", "component/navigation/Navigation"], function (require, exports, Navigation_1) {
+define(["require", "exports", "js/component/navigation/Navigation"], function (require, exports, Navigation_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = {
