@@ -13,6 +13,12 @@
         <script th:if="${env.development == false}" src="/library/vue/2.6.12/vue.min.js" th:src="@{/library/vue/2.6.12/vue.min.js}"></script>
     </div>
 
+    <!--moment引入-->
+    <div th:fragment="common-resources-moment">
+        <script th:if="${env.development == true}" src="/library/moment/2.24.0/moment.js" th:src="@{/library/moment/2.24.0/moment.js}"></script>
+        <script th:if="${env.development == false}" src="/library/moment/2.24.0/moment.min.js" th:src="@{/library/moment/2.24.0/moment.min.j}"></script>
+    </div>
+
     <!--element-ui 引入-->
     <!--  ant-design-vue引入  -->
     <div th:fragment="common-resources-ant-js">

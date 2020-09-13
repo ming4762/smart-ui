@@ -20,6 +20,9 @@ define(["require", "exports"], function (require, exports) {
         ApiService.getToken = function () {
             return sessionStorage.getItem(STORE_TOKEN_KEY);
         };
+        ApiService.saveToken = function (token) {
+            sessionStorage.setItem(STORE_TOKEN_KEY, token);
+        };
         ApiService.ajax = function (url, ajaxType, parameter, customParameter) {
             var serverParameter = Object.assign({
                 method: ajaxType,
@@ -34,7 +37,11 @@ define(["require", "exports"], function (require, exports) {
             }
             return API_SERVICE(serverParameter)
                 .then(function (result) {
-                return result;
+                var data = result.data;
+                if (data.success === false) {
+                    return Promise.reject(data);
+                }
+                return result.data;
             });
         };
         ApiService.postAjax = function (url, parameter, customParameter) {

@@ -32,11 +32,17 @@ const moduleMap: { [key: string]: Module } = {
 	'vue-ant-table': {
 		name: 'ue-ant-table',
 		js: [
-			'/../../plugins/vue-ant-table/vue-ant-table.umd.js'
+			'plugins/vue-ant-table/vue-ant-table.umd.min'
 		],
 		css: [
 		  'plugins/vue-ant-table/vue-ant-table.css'
     ]
+	},
+	'moment': {
+		name: 'moment',
+		js: [
+			'library/moment/2.24.0/moment.min'
+		]
 	}
 }
 

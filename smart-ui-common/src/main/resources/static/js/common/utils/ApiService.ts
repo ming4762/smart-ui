@@ -39,6 +39,10 @@ export default class ApiService {
 		return sessionStorage.getItem(STORE_TOKEN_KEY)
 	}
 
+	public static saveToken (token: string): void {
+		sessionStorage.setItem(STORE_TOKEN_KEY, token)
+	}
+
 	/**
 	 * 发送ajax请求
 	 * @param url 请求地址
@@ -62,8 +66,11 @@ export default class ApiService {
 		}
 		return API_SERVICE(serverParameter)
 			.then((result: any) => {
-				// todo: 待完善
-				return result
+				const data = result.data
+				if (data.success === false) {
+					return Promise.reject(data)
+				}
+				return result.data
 			})
 	}
 
