@@ -10,6 +10,8 @@ function getApiUrl (): string {
 	return localStorage.getItem(API_URL_KEY) || '/'
 }
 
+axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8'
+
 const API_SERVICE = axios.create({
 	baseURL: getApiUrl(),
 	timeout: 100000
