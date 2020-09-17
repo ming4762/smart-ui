@@ -36599,7 +36599,7 @@ var defaultPagination = {
             }, [_this11.rowDeleteButtonText])]));
           }
 
-          if (_this11.$slots['row-operation']) {
+          if (_this11.$scopedSlots['row-operation']) {
             vnodes.push(_this11.$scopedSlots['row-operation']({
               text: text,
               record: record,
