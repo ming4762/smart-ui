@@ -5,7 +5,7 @@ import ApiService from './ApiService'
  * @author shizhongming
  * 2020/9/13 5:12 下午
  */
-export default class PageListApiService {
+export default class DataApiService {
 	/**
 	 * 发送post请求
 	 * @param url
