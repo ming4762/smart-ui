@@ -11,7 +11,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-define(["require", "exports", "js/common/utils/ModuleLoader", "js/common/PageBuilder", "js/common/utils/PageListApiService"], function (require, exports, ModuleLoader_1, PageBuilder_1, PageListApiService_1) {
+define(["require", "exports", "js/common/utils/ModuleLoader", "js/common/PageBuilder", "js/common/utils/DataApiService"], function (require, exports, ModuleLoader_1, PageBuilder_1, DataApiService_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var moment = window['moment'];
@@ -170,7 +170,14 @@ define(["require", "exports", "js/common/utils/ModuleLoader", "js/common/PageBui
                         label: '创建时间',
                         prop: 'createTime',
                         table: {
-                            width: 120,
+                            width: 170,
+                            customRender: function (text) {
+                                if (text) {
+                                    return moment(text).format('YYYY-MM-DD HH:MM');
+                                }
+                                return '';
+                            },
+                            sorter: true,
                             visible: false
                         },
                         form: {
@@ -192,7 +199,14 @@ define(["require", "exports", "js/common/utils/ModuleLoader", "js/common/PageBui
                         label: '更新时间',
                         prop: 'updateTime',
                         table: {
-                            width: 120,
+                            width: 170,
+                            customRender: function (text) {
+                                if (text) {
+                                    return moment(text).format('YYYY-MM-DD HH:MM');
+                                }
+                                return '';
+                            },
+                            sorter: true,
                             visible: false
                         },
                         form: {
@@ -200,7 +214,7 @@ define(["require", "exports", "js/common/utils/ModuleLoader", "js/common/PageBui
                         }
                     }
                 ],
-                apiService: PageListApiService_1.default,
+                apiService: DataApiService_1.default,
                 sexMap: sexMap
             };
         },
@@ -223,10 +237,7 @@ define(["require", "exports", "js/common/utils/ModuleLoader", "js/common/PageBui
                 }
                 return '未知';
             },
-            createDate: function () {
-                return moment();
-            }
         },
-        template: "\n\t<div style=\"padding: 10px; background:  rgba(0, 21, 41, 0.08)\" >\n      <div style=\"height: 1000px; background: white; overflow:auto\">\n          <s-table-crud\n          \t:keys=\"['userId']\"\n\t          size=\"middle\"\n            :pagination=\"{}\"\n\t          :addEditFormSpan=\"12\"\n            :opreaColumnWidth=\"140\"\n            :scroll=\"{ x: 1800 }\"\n            showIndex\n\t          :api-service=\"apiService\"\n            query-url=\"sys/user/list\"\n            text-row-button\n\t          :bordered=\"false\"\n            :columns=\"columns\">\n\t\t          <template v-slot:table-userSex=\"{ text }\">\n                  <a-tag :color=\"getSexColor(text)\">\n                      {{getSexText(text)}}\n                  </a-tag>\n\t\t          </template>\n\t\t          <template v-slot:form-birthday11=\"{}\">\n                  <a-date-picker v-decorator=\"['birthday11', {\n                  \tinitialValue: createDate()\n                  }]\" />\n\t\t          </template>\n\t\t          <template v-slot:form-sex=\"{}\">\n\t\t\t\t          <a-radio-group v-decorator=\"['sex']\">\n\t\t\t\t\t\t          <a-radio\n\t\t\t\t\t\t\t          v-for=\"(value, key) in sexMap\"\n\t\t\t\t\t\t\t          :key=\"key\"\n\t\t\t\t\t\t          \t:value=\"key\">\n\t\t\t\t\t\t\t\t          {{value}}\n\t\t\t\t\t\t          </a-radio>\n\t\t\t\t          </a-radio-group>\n\t\t          </template>\n          </s-table-crud>\n      </div>\t\n\t</div>\n\t"
+        template: "\n\t<div style=\"padding: 10px; background:  rgba(0, 21, 41, 0.08)\" >\n      <div style=\"background: white; overflow:auto\">\n          <s-table-crud\n          \t:keys=\"['userId']\"\n\t          size=\"middle\"\n            :pagination=\"{}\"\n\t          :addEditFormSpan=\"12\"\n            :opreaColumnWidth=\"140\"\n            :scroll=\"{ x: 1800 }\"\n            showIndex\n\t          :api-service=\"apiService\"\n            query-url=\"sys/user/list\"\n            text-row-button\n\t          :bordered=\"false\"\n            :columns=\"columns\">\n\t\t          <template v-slot:table-userSex=\"{ text }\">\n                  <a-tag :color=\"getSexColor(text)\">\n                      {{getSexText(text)}}\n                  </a-tag>\n\t\t          </template>\n\t\t          <template v-slot:form-sex=\"{}\">\n\t\t\t\t          <a-radio-group v-decorator=\"['sex']\">\n\t\t\t\t\t\t          <a-radio\n\t\t\t\t\t\t\t          v-for=\"(value, key) in sexMap\"\n\t\t\t\t\t\t\t          :key=\"key\"\n\t\t\t\t\t\t          \t:value=\"key\">\n\t\t\t\t\t\t\t\t          {{value}}\n\t\t\t\t\t\t          </a-radio>\n\t\t\t\t          </a-radio-group>\n\t\t          </template>\n          </s-table-crud>\n      </div>\t\n\t</div>\n\t"
     };
 });

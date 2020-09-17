@@ -3,7 +3,7 @@ import moduleLoader from 'js/common/utils/ModuleLoader'
 // @ts-ignore
 import PageBuilder from 'js/common/PageBuilder'
 // @ts-ignore
-import PageListApiService from 'js/common/utils/PageListApiService'
+import DataApiService from 'js/common/utils/DataApiService'
 
 let moment: Function = window['moment']
 
@@ -170,7 +170,14 @@ const page = {
 					label: '创建时间',
 					prop: 'createTime',
 					table: {
-						width: 120,
+						width: 170,
+						customRender: (text) => {
+							if (text) {
+								return moment(text).format('YYYY-MM-DD HH:MM')
+							}
+							return ''
+						},
+						sorter: true,
 						visible: false
 					},
 					form: {
@@ -192,7 +199,14 @@ const page = {
 					label: '更新时间',
 					prop: 'updateTime',
 					table: {
-						width: 120,
+						width: 170,
+						customRender: (text) => {
+							if (text) {
+								return moment(text).format('YYYY-MM-DD HH:MM')
+							}
+							return ''
+						},
+						sorter: true,
 						visible: false
 					},
 					form: {
@@ -200,7 +214,7 @@ const page = {
 					}
 				}
 			],
-			apiService: PageListApiService,
+			apiService: DataApiService,
 			sexMap: sexMap
 		}
 	},
@@ -224,14 +238,11 @@ const page = {
 			}
 			return '未知'
 		},
-		createDate () {
-			return moment()
-		}
 	},
 	// language=html
 	template: `
 	<div style="padding: 10px; background:  rgba(0, 21, 41, 0.08)" >
-      <div style="height: 1000px; background: white; overflow:auto">
+      <div style="background: white; overflow:auto">
           <s-table-crud
           	:keys="['userId']"
 	          size="middle"
@@ -249,11 +260,6 @@ const page = {
                   <a-tag :color="getSexColor(text)">
                       {{getSexText(text)}}
                   </a-tag>
-		          </template>
-		          <template v-slot:form-birthday11="{}">
-                  <a-date-picker v-decorator="['birthday11', {
-                  	initialValue: createDate()
-                  }]" />
 		          </template>
 		          <template v-slot:form-sex="{}">
 				          <a-radio-group v-decorator="['sex']">
