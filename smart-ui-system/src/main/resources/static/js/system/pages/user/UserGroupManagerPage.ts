@@ -59,7 +59,7 @@ const page = {
 					label: '用户组编码',
 					prop: 'groupCode',
 					table: {
-						width: 120,
+						width: 160,
 						fixed: true
 					},
 					search: {
@@ -71,7 +71,8 @@ const page = {
 					prop: 'remark',
 					table: {
 						width: 200
-					}
+					},
+					type: 'textarea'
 				},
 				{
 					label: '是否启用',
@@ -81,6 +82,9 @@ const page = {
 						scopedSlots: { customRender: 'table-enable' },
 						sorter: true
 					},
+					form: {
+						defaultValue: true
+					},
 					type: 'boolean'
 				},
 				{
@@ -89,7 +93,8 @@ const page = {
 					table: {
 						width: 120,
 						sorter: true
-					}
+					},
+					type: 'number'
 				},
 				{
 					label: '创建人员',
@@ -241,6 +246,7 @@ const page = {
             :api-service="apiService"
             query-url="sys/userGroup/list"
 	          delete-url="sys/userGroup/batchDeleteById"
+            saveUpdateUrl="sys/userGroup/saveUpdate"
             :pagination="{}">
 		          <template v-slot:table-enable="{ text }">
                   <a-tag :color="text ? '#108ee9' : '#f50'">
@@ -261,6 +267,9 @@ const page = {
             :visible="setUserModalVisible">
               <a-transfer
                 show-search
+                :list-style="{
+									height: '500px'
+								}"
                 @change="handleSelectUser"
                 :render="item => item.title"
                 :data-source="allUserList"

@@ -33710,6 +33710,9 @@ var defaultFormCols = {
   beforeMount: function beforeMount() {
     this.setDefaultValue();
   },
+  mounted: function mounted() {
+    this.$emit('beforeMount', this);
+  },
   beforeUpdate: function beforeUpdate() {
     this.setDefaultValue();
   },
@@ -35493,16 +35496,12 @@ var defaultPagination = {
           top: true
         }
       };
-      var defaultButton = this.defaultButtonConfig;
+      var defaultButton = this.defaultButtonConfig || {};
 
-      if (defaultButton) {
-        for (var key in result) {
-          if (defaultButton[key]) {
-            var showConfig = this.isButtonShow(defaultButton[key], result[key].top, result[key].row);
-            result[key].top = showConfig[0];
-            result[key].row = showConfig[1];
-          }
-        }
+      for (var key in result) {
+        var showConfig = this.isButtonShow(defaultButton[key], result[key].top, result[key].row);
+        result[key].top = showConfig[0];
+        result[key].row = showConfig[1];
       }
 
       return result;
@@ -35942,33 +35941,55 @@ var defaultPagination = {
     },
 
     /**
-     * 添加编辑弹窗显示
+     * 添加修改弹窗form创建完毕事件
+     * @param formVue
      */
-    handleAddEditDialogShow: function handleAddEditDialogShow(ident, row) {
+    handleAddEditFormCreate: function handleAddEditFormCreate(formVue) {
+      var _this$addEditProperti = this.addEditProperties,
+          row = _this$addEditProperti.row,
+          ident = _this$addEditProperti.ident;
+      this.addEditDialogShowMethods(ident, row, formVue);
+      this.addEditProperties = {};
+    },
+    addEditDialogShowMethods: function addEditDialogShowMethods(ident, row, formVue) {
       var _this5 = this;
 
-      // 显示弹窗
-      this.addEditDialog.visible = true; // 回调函数
+      var $this = this; // 回调函数
 
       var callBack = function callBack(model) {
         _this5.oldAddEditModel = Object.assign({}, row);
 
         if (model) {
-          _this5.getAddEditFormVue().setFieldsValue(model);
+          formVue.form.setFieldsValue(model);
         } else {
-          _this5.getOne(ident, row);
+          $this.getOne(ident, row);
         }
       }; // 重置表单
 
 
-      if (this.getAddEditFormVue()) {
-        this.getAddEditFormVue().reset();
-      }
+      formVue.reset();
 
       if (!this.$listeners[EVENTS.ADD_EDIT_DIALOG_SHOW]) {
         callBack(null);
       } else {
-        this.$emit(EVENTS.ADD_EDIT_DIALOG_SHOW, ident, this.getAddEditFormVue().getFieldsValue(), callBack, row);
+        this.$emit(EVENTS.ADD_EDIT_DIALOG_SHOW, ident, formVue.getFormModel(), callBack, row);
+      }
+    },
+
+    /**
+     * 添加编辑弹窗显示
+     */
+    handleAddEditDialogShow: function handleAddEditDialogShow(ident, row) {
+      // 显示弹窗
+      this.addEditDialog.visible = true;
+
+      if (!this.getAddEditFormVue()) {
+        this.addEditProperties = {
+          row: row,
+          ident: ident
+        };
+      } else {
+        this.addEditDialogShowMethods(ident, row, this.getAddEditFormVue());
       }
     },
 
@@ -36076,15 +36097,23 @@ var defaultPagination = {
      * @returns {boolean[]}
      */
     isButtonShow: function isButtonShow(buttonConfig, topShow, rowShow) {
-      if (buttonConfig.rowShow === false || !validatePermission(buttonConfig.permission, this.permissions)) {
-        rowShow = false;
+      // 行按钮处理
+      var rowDefault = rowShow;
+
+      if (buttonConfig !== undefined && buttonConfig.rowShow !== undefined) {
+        rowDefault = buttonConfig.rowShow;
       }
 
-      if (buttonConfig.topShow === false || !validatePermission(buttonConfig.permission, this.permissions)) {
-        topShow = false;
+      var row = [rowDefault, validatePermission(buttonConfig === undefined ? null : buttonConfig.permission, this.permissions)]; // 顶部按钮处理
+
+      var topDefault = topShow;
+
+      if (buttonConfig !== undefined && buttonConfig.topShow !== undefined) {
+        topDefault = buttonConfig.topShow;
       }
 
-      return [topShow, rowShow];
+      var top = [rowDefault, validatePermission(buttonConfig === undefined ? null : buttonConfig.permission, this.permissions)];
+      return [top[0] && top[1], row[0] && row[1]];
     },
 
     /**
@@ -36383,6 +36412,9 @@ var defaultPagination = {
       }]), [h("s-form", helper_default()([{}, {
         scopedSlots: this.createAddEditScopeSlots()
       }, {
+        "on": {
+          "beforeMount": this.handleAddEditFormCreate
+        },
         "attrs": {
           "layout": this.addEditFormlayout,
           "defaultSpan": this.addEditFormSpan,
@@ -36537,7 +36569,7 @@ var defaultPagination = {
               "attrs": {
                 "type": _this11.rowAddButtonType,
                 "size": "small",
-                "icon": "plus"
+                "icon": _this11.textRowButton ? '' : 'plus'
               },
               "style": "width: 50px; margin-right: 5px",
               "on": {

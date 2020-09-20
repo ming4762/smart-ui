@@ -14,10 +14,19 @@ define(["require", "exports"], function (require, exports) {
         },
         watch: {},
         methods: {
-            getMenuPath: function (menu) {
+            getMenuPath(menu) {
                 return menu.path;
             }
         },
-        template: "\n\t<div class=\"page-container\">\n      <iframe\n        :class=\"menu.key === activeMenu.key ? 'active' : ''\"\n        class=\"animation-fade page-frame\"\n        v-for=\"menu in openMenuList\"\n        :src=\"getMenuPath(menu)\"\n        :key=\"menu.key\"/>\n\t</div>\n\t"
+        template: `
+	<div class="page-container">
+      <iframe
+        :class="menu.key === activeMenu.key ? 'active' : ''"
+        class="animation-fade page-frame"
+        v-for="menu in openMenuList"
+        :src="getMenuPath(menu)"
+        :key="menu.key"/>
+	</div>
+	`
     };
 });

@@ -1,39 +1,20 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 define(["require", "exports", "js/common/PageBuilder", "js/common/utils/ModuleLoader", "js/common/utils/DataApiService"], function (require, exports, PageBuilder_1, ModuleLoader_1, DataApiService_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var moment = window['moment'];
-    var UserGroupManagerPage = (function (_super) {
-        __extends(UserGroupManagerPage, _super);
-        function UserGroupManagerPage() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        UserGroupManagerPage.prototype.init = function () {
-            var _this = this;
-            ModuleLoader_1.default(['vue-ant-table']).then(function () {
-                _this.initVue();
+    let moment = window['moment'];
+    class UserGroupManagerPage extends PageBuilder_1.default {
+        init() {
+            ModuleLoader_1.default(['vue-ant-table']).then(() => {
+                this.initVue();
             });
-        };
-        UserGroupManagerPage.prototype.build = function () {
+        }
+        build() {
             return page;
-        };
-        return UserGroupManagerPage;
-    }(PageBuilder_1.default));
+        }
+    }
     exports.default = UserGroupManagerPage;
-    var page = {
-        data: function () {
+    const page = {
+        data() {
             return {
                 apiService: DataApiService_1.default,
                 columns: [
@@ -64,7 +45,7 @@ define(["require", "exports", "js/common/PageBuilder", "js/common/utils/ModuleLo
                         label: '用户组编码',
                         prop: 'groupCode',
                         table: {
-                            width: 120,
+                            width: 160,
                             fixed: true
                         },
                         search: {
@@ -76,7 +57,8 @@ define(["require", "exports", "js/common/PageBuilder", "js/common/utils/ModuleLo
                         prop: 'remark',
                         table: {
                             width: 200
-                        }
+                        },
+                        type: 'textarea'
                     },
                     {
                         label: '是否启用',
@@ -86,6 +68,9 @@ define(["require", "exports", "js/common/PageBuilder", "js/common/utils/ModuleLo
                             scopedSlots: { customRender: 'table-enable' },
                             sorter: true
                         },
+                        form: {
+                            defaultValue: true
+                        },
                         type: 'boolean'
                     },
                     {
@@ -94,7 +79,8 @@ define(["require", "exports", "js/common/PageBuilder", "js/common/utils/ModuleLo
                         table: {
                             width: 120,
                             sorter: true
-                        }
+                        },
+                        type: 'number'
                     },
                     {
                         label: '创建人员',
@@ -111,7 +97,7 @@ define(["require", "exports", "js/common/PageBuilder", "js/common/utils/ModuleLo
                         prop: 'createTime',
                         table: {
                             width: 170,
-                            customRender: function (text) {
+                            customRender: (text) => {
                                 if (text) {
                                     return moment(text).format('YYYY-MM-DD HH:MM');
                                 }
@@ -138,7 +124,7 @@ define(["require", "exports", "js/common/PageBuilder", "js/common/utils/ModuleLo
                         prop: 'updateTime',
                         table: {
                             width: 170,
-                            customRender: function (text) {
+                            customRender: (text) => {
                                 if (text) {
                                     return moment(text).format('YYYY-MM-DD HH:MM');
                                 }
@@ -159,60 +145,106 @@ define(["require", "exports", "js/common/PageBuilder", "js/common/utils/ModuleLo
             };
         },
         methods: {
-            handleShowSetUser: function (userGroup) {
+            handleShowSetUser(userGroup) {
                 this.currentUserGroup = userGroup;
                 this.loadAllUserList();
                 this.loadGroupUser(userGroup.groupId);
                 this.setUserModalVisible = true;
             },
-            handleSetUser: function () {
-                var _this = this;
+            handleSetUser() {
                 this.setUserLoading = true;
                 DataApiService_1.default.postAjax('sys/userGroup/saveUserGroupByGroupId', {
                     groupId: this.currentUserGroup.groupId,
                     userIdList: this.selectUserIdList
-                }).then(function () {
-                    _this.selectUserIdList = [];
-                    _this.setUserModalVisible = false;
-                    _this.$message.success('设置用户成功');
-                }).catch(function (error) {
+                }).then(() => {
+                    this.selectUserIdList = [];
+                    this.setUserModalVisible = false;
+                    this.$message.success('设置用户成功');
+                }).catch(error => {
                     console.error(error);
-                    _this.$message.error('设置用户发生错误');
-                }).finally(function () {
-                    _this.setUserLoading = false;
+                    this.$message.error('设置用户发生错误');
+                }).finally(() => {
+                    this.setUserLoading = false;
                 });
             },
-            loadGroupUser: function (groupId) {
-                var _this = this;
+            loadGroupUser(groupId) {
                 DataApiService_1.default.postAjax('sys/userGroup/listUserIdById', groupId)
-                    .then(function (data) {
-                    _this.selectUserIdList = data.map(function (key) { return key + ''; });
-                }).catch(function (error) {
+                    .then((data) => {
+                    this.selectUserIdList = data.map(key => key + '');
+                }).catch(error => {
                     console.error(error);
-                    _this.message.error('加载用户列表失败');
+                    this.message.error('加载用户列表失败');
                 });
             },
-            loadAllUserList: function () {
-                var _this = this;
+            loadAllUserList() {
                 if (this.allUserList.length === 0) {
                     DataApiService_1.default.postAjax('sys/user/list')
-                        .then(function (data) {
-                        _this.allUserList = data.map(function (item) {
+                        .then(data => {
+                        this.allUserList = data.map(item => {
                             return {
                                 key: item.userId + '',
                                 title: item.realname
                             };
                         });
-                    }).catch(function (error) {
+                    }).catch(error => {
                         console.error(error);
-                        _this.$message.error('加载用户列表失败');
+                        this.$message.error('加载用户列表失败');
                     });
                 }
             },
-            handleSelectUser: function (targetKeys) {
+            handleSelectUser(targetKeys) {
                 this.selectUserIdList = targetKeys;
             }
         },
-        template: "\n\t<div style=\"padding: 10px; background:  rgba(0, 21, 41, 0.08)\">\n\t\t\t<div style=\"background: white; overflow:auto\">\n          <s-table-crud\n          \t:keys=\"['groupId']\"\n            size=\"middle\"\n            :scroll=\"{ x: 1400 }\"\n            :columns=\"columns\"\n            :opreaColumnWidth=\"210\"\n            defaultSearchVisible\n\t          :rowSelection=\"{}\"\n            text-row-button\n\t          :deleteWarningHandler=\"() => '\u8BE5\u64CD\u4F5C\u4F1A\u540C\u65F6\u5220\u9664\u7528\u6237\u7EC4\u4E0E\u7528\u6237\u5173\u7CFB\uFF0C\u786E\u5B9A\u8981\u5220\u9664\u5417\uFF1F'\"\n\t          :leftButtonInGroup=\"false\"\n            :bordered=\"false\"\n            :api-service=\"apiService\"\n            query-url=\"sys/userGroup/list\"\n\t          delete-url=\"sys/userGroup/batchDeleteById\"\n            :pagination=\"{}\">\n\t\t          <template v-slot:table-enable=\"{ text }\">\n                  <a-tag :color=\"text ? '#108ee9' : '#f50'\">\n                      {{text ? '\u542F\u7528' : '\u7981\u7528'}}\n                  </a-tag>\n\t\t          </template>\n\t\t          <template v-slot:row-operation=\"{text, record}\">\n\t\t\t\t          <a-button @click=\"handleShowSetUser(record)\" type=\"link\">\u8BBE\u7F6E\u7528\u6237</a-button>\n\t\t          </template>\n          </s-table-crud>\n\n          <a-modal\n            title=\"\u8BBE\u7F6E\u7528\u6237\"\n            :confirm-loading=\"setUserLoading\"\n            @ok=\"handleSetUser\"\n            :width=\"450\"\n            @cancel=\"setUserModalVisible = false\"\n            :visible=\"setUserModalVisible\">\n              <a-transfer\n                show-search\n                @change=\"handleSelectUser\"\n                :render=\"item => item.title\"\n                :data-source=\"allUserList\"\n              \t:target-keys=\"selectUserIdList\"/>\n          </a-modal>\n\t\t\t</div>\n\t</div>\n\t"
+        template: `
+	<div style="padding: 10px; background:  rgba(0, 21, 41, 0.08)">
+			<div style="background: white; overflow:auto">
+          <s-table-crud
+          	:keys="['groupId']"
+            size="middle"
+            :scroll="{ x: 1400 }"
+            :columns="columns"
+            :opreaColumnWidth="210"
+            defaultSearchVisible
+	          :rowSelection="{}"
+            text-row-button
+	          :deleteWarningHandler="() => '该操作会同时删除用户组与用户关系，确定要删除吗？'"
+	          :leftButtonInGroup="false"
+            :bordered="false"
+            :api-service="apiService"
+            query-url="sys/userGroup/list"
+	          delete-url="sys/userGroup/batchDeleteById"
+            saveUpdateUrl="sys/userGroup/saveUpdate"
+            :pagination="{}">
+		          <template v-slot:table-enable="{ text }">
+                  <a-tag :color="text ? '#108ee9' : '#f50'">
+                      {{text ? '启用' : '禁用'}}
+                  </a-tag>
+		          </template>
+		          <template v-slot:row-operation="{text, record}">
+				          <a-button @click="handleShowSetUser(record)" type="link">设置用户</a-button>
+		          </template>
+          </s-table-crud>
+
+          <a-modal
+            title="设置用户"
+            :confirm-loading="setUserLoading"
+            @ok="handleSetUser"
+            :width="450"
+            @cancel="setUserModalVisible = false"
+            :visible="setUserModalVisible">
+              <a-transfer
+                show-search
+                :list-style="{
+									height: '500px'
+								}"
+                @change="handleSelectUser"
+                :render="item => item.title"
+                :data-source="allUserList"
+              	:target-keys="selectUserIdList"/>
+          </a-modal>
+			</div>
+	</div>
+	`
     };
 });

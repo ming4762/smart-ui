@@ -1,44 +1,25 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 define(["require", "exports", "js/common/utils/ModuleLoader", "js/common/PageBuilder", "js/common/utils/DataApiService"], function (require, exports, ModuleLoader_1, PageBuilder_1, DataApiService_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var moment = window['moment'];
-    var UserManagerPage = (function (_super) {
-        __extends(UserManagerPage, _super);
-        function UserManagerPage() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        UserManagerPage.prototype.init = function () {
-            var _this = this;
-            ModuleLoader_1.default(['vue-ant-table']).then(function () {
-                _this.initVue();
+    let moment = window['moment'];
+    class UserManagerPage extends PageBuilder_1.default {
+        init() {
+            ModuleLoader_1.default(['vue-ant-table']).then(() => {
+                this.initVue();
             });
-        };
-        UserManagerPage.prototype.build = function () {
+        }
+        build() {
             return page;
-        };
-        return UserManagerPage;
-    }(PageBuilder_1.default));
+        }
+    }
     exports.default = UserManagerPage;
-    var sexMap = {
+    const sexMap = {
         1: '男',
         2: '女',
         3: '未知'
     };
-    var page = {
-        data: function () {
+    const page = {
+        data() {
             return {
                 columns: [
                     {
@@ -103,7 +84,7 @@ define(["require", "exports", "js/common/utils/ModuleLoader", "js/common/PageBui
                         prop: 'birthday',
                         table: {
                             width: 170,
-                            customRender: function (text) {
+                            customRender: (text) => {
                                 if (text) {
                                     return moment(text).format('YYYY-MM-DD HH:MM');
                                 }
@@ -171,7 +152,7 @@ define(["require", "exports", "js/common/utils/ModuleLoader", "js/common/PageBui
                         prop: 'createTime',
                         table: {
                             width: 170,
-                            customRender: function (text) {
+                            customRender: (text) => {
                                 if (text) {
                                     return moment(text).format('YYYY-MM-DD HH:MM');
                                 }
@@ -200,7 +181,7 @@ define(["require", "exports", "js/common/utils/ModuleLoader", "js/common/PageBui
                         prop: 'updateTime',
                         table: {
                             width: 170,
-                            customRender: function (text) {
+                            customRender: (text) => {
                                 if (text) {
                                     return moment(text).format('YYYY-MM-DD HH:MM');
                                 }
@@ -219,7 +200,7 @@ define(["require", "exports", "js/common/utils/ModuleLoader", "js/common/PageBui
             };
         },
         methods: {
-            getSexColor: function (value) {
+            getSexColor(value) {
                 if (value === 1) {
                     return '#108ee9';
                 }
@@ -228,7 +209,7 @@ define(["require", "exports", "js/common/utils/ModuleLoader", "js/common/PageBui
                 }
                 return '';
             },
-            getSexText: function (value) {
+            getSexText(value) {
                 if (value === 1) {
                     return '男';
                 }
@@ -238,6 +219,40 @@ define(["require", "exports", "js/common/utils/ModuleLoader", "js/common/PageBui
                 return '未知';
             },
         },
-        template: "\n\t<div style=\"padding: 10px; background:  rgba(0, 21, 41, 0.08)\" >\n      <div style=\"background: white; overflow:auto\">\n          <s-table-crud\n          \t:keys=\"['userId']\"\n\t          size=\"middle\"\n            :pagination=\"{}\"\n\t          :addEditFormSpan=\"12\"\n            :opreaColumnWidth=\"140\"\n            :scroll=\"{ x: 1800 }\"\n            showIndex\n\t          :api-service=\"apiService\"\n            query-url=\"sys/user/list\"\n            text-row-button\n\t          :bordered=\"false\"\n            :columns=\"columns\">\n\t\t          <template v-slot:table-userSex=\"{ text }\">\n                  <a-tag :color=\"getSexColor(text)\">\n                      {{getSexText(text)}}\n                  </a-tag>\n\t\t          </template>\n\t\t          <template v-slot:form-sex=\"{}\">\n\t\t\t\t          <a-radio-group v-decorator=\"['sex']\">\n\t\t\t\t\t\t          <a-radio\n\t\t\t\t\t\t\t          v-for=\"(value, key) in sexMap\"\n\t\t\t\t\t\t\t          :key=\"key\"\n\t\t\t\t\t\t          \t:value=\"key\">\n\t\t\t\t\t\t\t\t          {{value}}\n\t\t\t\t\t\t          </a-radio>\n\t\t\t\t          </a-radio-group>\n\t\t          </template>\n          </s-table-crud>\n      </div>\t\n\t</div>\n\t"
+        template: `
+	<div style="padding: 10px; background:  rgba(0, 21, 41, 0.08)" >
+      <div style="background: white; overflow:auto">
+          <s-table-crud
+          	:keys="['userId']"
+	          size="middle"
+            :pagination="{}"
+	          :addEditFormSpan="12"
+            :opreaColumnWidth="140"
+            :scroll="{ x: 1800 }"
+            showIndex
+	          :api-service="apiService"
+            query-url="sys/user/list"
+            text-row-button
+	          :bordered="false"
+            :columns="columns">
+		          <template v-slot:table-userSex="{ text }">
+                  <a-tag :color="getSexColor(text)">
+                      {{getSexText(text)}}
+                  </a-tag>
+		          </template>
+		          <template v-slot:form-sex="{}">
+				          <a-radio-group v-decorator="['sex']">
+						          <a-radio
+							          v-for="(value, key) in sexMap"
+							          :key="key"
+						          	:value="key">
+								          {{value}}
+						          </a-radio>
+				          </a-radio-group>
+		          </template>
+          </s-table-crud>
+      </div>	
+	</div>
+	`
     };
 });
