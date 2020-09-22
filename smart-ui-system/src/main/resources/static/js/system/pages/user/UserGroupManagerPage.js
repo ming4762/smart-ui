@@ -211,6 +211,7 @@ define(["require", "exports", "js/common/PageBuilder", "js/common/utils/ModuleLo
 	          :deleteWarningHandler="() => '该操作会同时删除用户组与用户关系，确定要删除吗？'"
 	          :leftButtonInGroup="false"
             :bordered="false"
+            defaultSortColumn="seq"
             :api-service="apiService"
             query-url="sys/userGroup/list"
 	          delete-url="sys/userGroup/batchDeleteById"
