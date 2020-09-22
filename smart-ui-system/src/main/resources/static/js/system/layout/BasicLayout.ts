@@ -82,25 +82,23 @@ export default {
 		 * 加载用户菜单信息
 		 */
 		loadUserMenus () {
-			DataApiService.postAjax('sys/user/listUserMenu')
-				.then(data => {
-					const menus = data.map(item => {
-						return {
-							key: item.functionId + '',
-							title: item.functionName,
-							icon: item.icon,
-							path: item.url,
-							parentKey: item.parentId + '',
-							data: item
-						}
-					})
-					this.computedBus.userMenuList = menus
-				}).catch(error => {
-				console.error(error)
-				this.$message.error('加载用户菜单失败')
-			})
 			if (this.computedBus.userMenuList.length === 0) {
-
+				DataApiService.postAjax('sys/user/listUserMenu')
+					.then(data => {
+						this.computedBus.userMenuList = data.map(item => {
+							return {
+								key: item.functionId + '',
+								title: item.functionName,
+								icon: item.icon,
+								path: item.url,
+								parentKey: item.parentId + '',
+								data: item
+							}
+						})
+					}).catch(error => {
+					console.error(error)
+					this.$message.error('加载用户菜单失败')
+				})
 			}
 		}
 	},
