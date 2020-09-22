@@ -1,4 +1,4 @@
-define(["require", "exports", "js/system/layout/menu/SideMenu", "js/system/layout/main/MainLayout", "js/system/mixins/ThemeMixins"], function (require, exports, SideMenu_1, MainLayout_1, ThemeMixins_1) {
+define(["require", "exports", "js/system/layout/menu/SideMenu", "js/system/layout/main/MainLayout", "js/system/mixins/ThemeMixins", "js/common/utils/DataApiService"], function (require, exports, SideMenu_1, MainLayout_1, ThemeMixins_1, DataApiService_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     const testUserMenuList = [
@@ -12,7 +12,7 @@ define(["require", "exports", "js/system/layout/menu/SideMenu", "js/system/layou
             key: '2',
             title: '用户管理',
             icon: 'user',
-            path: '/ui/common?page=system/pages/user/UserManagerPage',
+            path: '/ui/common?page=js/system/pages/user/UserManagerPage',
             parentKey: '1'
         },
         {
@@ -67,9 +67,25 @@ define(["require", "exports", "js/system/layout/menu/SideMenu", "js/system/layou
         },
         methods: {
             loadUserMenus() {
-                return new Promise(() => {
-                    this.computedBus.userMenuList = testUserMenuList;
+                DataApiService_1.default.postAjax('sys/user/listUserMenu')
+                    .then(data => {
+                    const menus = data.map(item => {
+                        return {
+                            key: item.functionId + '',
+                            title: item.functionName,
+                            icon: item.icon,
+                            path: item.url,
+                            parentKey: item.parentId + '',
+                            data: item
+                        };
+                    });
+                    this.computedBus.userMenuList = menus;
+                }).catch(error => {
+                    console.error(error);
+                    this.$message.error('加载用户菜单失败');
                 });
+                if (this.computedBus.userMenuList.length === 0) {
+                }
             }
         },
         template: `
