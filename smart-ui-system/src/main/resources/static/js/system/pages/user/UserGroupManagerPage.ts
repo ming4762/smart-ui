@@ -1,14 +1,18 @@
 // @ts-ignore
 import PageBuilder from 'js/common/PageBuilder'
+// @ts-ignore
+import CommonUtils from 'js/common/utils/CommonUtils'
 
 // @ts-ignore
 import moduleLoader from 'js/common/utils/ModuleLoader'
 // @ts-ignore
 import DataApiService from 'js/common/utils/DataApiService'
+// import UserList from './components/UserList'
 
-
+DataApiService.init401ErrorHandler()
 
 let moment: Function = window['moment']
+
 /**
  *
  * @author shizhongming
@@ -27,7 +31,12 @@ export default class UserGroupManagerPage extends PageBuilder {
 	}
 }
 
+
+
+
 const page = {
+	components: {
+	},
 	data () {
 		return {
 			apiService: DataApiService,
@@ -230,51 +239,51 @@ const page = {
 	// language=html
 	template: `
 	<div style="padding: 10px; background:  rgba(0, 21, 41, 0.08)">
-			<div style="background: white; overflow:auto">
+			<div class="user-group" style="background: white; overflow:auto">
           <s-table-crud
-          	:keys="['groupId']"
-            size="middle"
-            :scroll="{ x: 1400 }"
-            :columns="columns"
-            :opreaColumnWidth="210"
-            defaultSearchVisible
-	          :rowSelection="{}"
-            text-row-button
-	          :deleteWarningHandler="() => '该操作会同时删除用户组与用户关系，确定要删除吗？'"
-	          :leftButtonInGroup="false"
-            :bordered="false"
-            defaultSortColumn="seq"
-            :api-service="apiService"
-            query-url="sys/userGroup/list"
-	          delete-url="sys/userGroup/batchDeleteById"
-            saveUpdateUrl="sys/userGroup/saveUpdate"
-            :pagination="{}">
-		          <template v-slot:table-enable="{ text }">
+                  :keys="['groupId']"
+                  size="middle"
+                  :scroll="{ x: 1400 }"
+                  :columns="columns"
+                  :opreaColumnWidth="210"
+                  defaultSearchVisible
+                  :rowSelection="{}"
+                  text-row-button
+                  :deleteWarningHandler="() => '该操作会同时删除用户组与用户关系，确定要删除吗？'"
+                  :leftButtonInGroup="false"
+                  :bordered="false"
+                  defaultSortColumn="seq"
+                  :api-service="apiService"
+                  query-url="sys/userGroup/list"
+                  delete-url="sys/userGroup/batchDeleteById"
+                  saveUpdateUrl="sys/userGroup/saveUpdate"
+                  :pagination="{}">
+              <template v-slot:table-enable="{ text }">
                   <a-tag :color="text ? '#108ee9' : '#f50'">
                       {{text ? '启用' : '禁用'}}
                   </a-tag>
-		          </template>
-		          <template v-slot:row-operation="{text, record}">
-				          <a-button @click="handleShowSetUser(record)" type="link">设置用户</a-button>
-		          </template>
+              </template>
+              <template v-slot:row-operation="{text, record}">
+                  <a-button @click="handleShowSetUser(record)" type="link">设置用户</a-button>
+              </template>
           </s-table-crud>
 
           <a-modal
-            title="设置用户"
-            :confirm-loading="setUserLoading"
-            @ok="handleSetUser"
-            :width="450"
-            @cancel="setUserModalVisible = false"
-            :visible="setUserModalVisible">
+                  title="设置用户"
+                  :confirm-loading="setUserLoading"
+                  @ok="handleSetUser"
+                  :width="450"
+                  @cancel="setUserModalVisible = false"
+                  :visible="setUserModalVisible">
               <a-transfer
-                show-search
-                :list-style="{
+                      show-search
+                      :list-style="{
 									height: '500px'
 								}"
-                @change="handleSelectUser"
-                :render="item => item.title"
-                :data-source="allUserList"
-              	:target-keys="selectUserIdList"/>
+                      @change="handleSelectUser"
+                      :render="item => item.title"
+                      :data-source="allUserList"
+                      :target-keys="selectUserIdList"/>
           </a-modal>
 			</div>
 	</div>
