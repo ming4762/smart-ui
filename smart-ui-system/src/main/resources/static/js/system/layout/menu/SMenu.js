@@ -1,7 +1,7 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var subMenu = {
+    const subMenu = {
         isSubMenu: true,
         props: {
             menu: {
@@ -9,10 +9,27 @@ define(["require", "exports"], function (require, exports) {
                 required: true
             }
         },
-        mounted: function () {
+        mounted() {
             console.log(this);
         },
-        template: "\n<a-sub-menu\n  v-bind=\"$attrs\"\n  v-on=\"$listeners\"\n  :key=\"menu.key\">\n\t<span slot=\"title\">\n    <a-icon type=\"mail\" />\n\t\t<span>{{ menu.title }}</span>\n  </span>\n  <template v-for=\"item in menu.children\">\n      <a-menu-item v-if=\"!item.children\" :key=\"item.key\">\n          <a-icon type=\"pie-chart\" />\n          <span>{{ item.title }}</span>\n      </a-menu-item>\n      <SubMenu v-else :key=\"item.key\" :menu=\"item\" />\n  </template>\n</a-sub-menu>\t\t\n\t"
+        template: `
+<a-sub-menu
+  v-bind="$attrs"
+  v-on="$listeners"
+  :key="menu.key">
+	<span slot="title">
+    <a-icon type="mail" />
+		<span>{{ menu.title }}</span>
+  </span>
+  <template v-for="item in menu.children">
+      <a-menu-item v-if="!item.children" :key="item.key">
+          <a-icon type="pie-chart" />
+          <span>{{ item.title }}</span>
+      </a-menu-item>
+      <SubMenu v-else :key="item.key" :menu="item" />
+  </template>
+</a-sub-menu>		
+	`
     };
     function getLeafMenuTemplate(menu) {
     }
@@ -23,37 +40,75 @@ define(["require", "exports"], function (require, exports) {
         props: {
             menuList: {
                 type: Array,
-                default: function () { return ([]); }
+                default: () => ([])
             }
         },
-        data: function () {
+        data() {
             return {
                 selectedKeys: []
             };
         },
-        mounted: function () {
+        mounted() {
         },
         computed: {
-            computedBus: function () {
+            computedBus() {
                 return window.busVue;
             },
-            computedActiveKeys: function () {
-                var activeMenu = this.computedBus.activeMenu;
-                var keys = [];
+            computedActiveKeys() {
+                const activeMenu = this.computedBus.activeMenu;
+                const keys = [];
                 if (activeMenu.key) {
                     keys.push(activeMenu.key);
                 }
             },
         },
         methods: {
-            hasChildren: function (menu) {
+            hasChildren(menu) {
                 return menu.children && menu.children.length > 0;
             },
-            handleClickMenu: function (_a) {
-                var key = _a.key;
+            handleClickMenu({ key }) {
                 this.computedBus.addMenu(key);
             }
         },
-        template: "\n<a-menu\n  mode=\"inline\"\n\t@click=\"handleClickMenu\"\n  theme=\"dark\">\n\t<template\n\t\tv-for=\"item in menuList\">\n      <a-menu-item v-if=\"!hasChildren(item)\" :key=\"item.key\">\n        <a-icon :type=\"item.icon\" />\n        <span>{{ item.title }}</span>\n      </a-menu-item>\n\t\t\t<a-sub-menu\n\t\t\t\tv-else\n\t\t\t\t:key=\"item.key\">\n\t\t\t\t<span slot=\"title\">\n\t\t\t    <a-icon :type=\"item.icon\" />\n\t\t\t\t\t<span>{{ item.title }}</span>\n\t\t\t  </span>\n\t\t\t\t<template v-for=\"menu2 in item.children\">\n            <a-menu-item v-if=\"!hasChildren(menu2)\" :key=\"menu2.key\">\n                <a-icon :type=\"menu2.icon\" />\n                <span>{{ menu2.title }}</span>\n            </a-menu-item>\n\t\t\t\t\t\t<a-sub-menu v-else :key=\"menu2.key\">\n\t\t\t\t\t\t\t\t<span slot=\"title\">\n\t\t\t\t\t\t\t    <a-icon :type=\"menu2.icon\" />\n\t\t\t\t\t\t\t\t\t<span>{{ menu2.title }}</span>\n\t\t\t\t\t\t\t  </span>\n\t\t\t\t\t\t\t\t<template v-for=\"menu3 in menu2.children\">\n                    <a-menu-item v-if=\"!hasChildren(menu3)\" :key=\"menu3.key\">\n                        <a-icon :type=\"menu3.icon\" />\n                        <span>{{ menu3.title }}</span>\n                    </a-menu-item>\n\t\t\t\t\t\t\t\t</template>\n\t\t\t\t\t\t</a-sub-menu>\n\t\t\t\t</template>\n\t\t\t</a-sub-menu>\n\t</template>\t\n</a-menu>\n\t"
+        template: `
+<a-menu
+  mode="inline"
+	@click="handleClickMenu"
+  theme="dark">
+	<template
+		v-for="item in menuList">
+      <a-menu-item v-if="!hasChildren(item)" :key="item.key">
+        <a-icon :type="item.icon" />
+        <span>{{ item.title }}</span>
+      </a-menu-item>
+			<a-sub-menu
+				v-else
+				:key="item.key">
+				<span slot="title">
+			    <a-icon :type="item.icon" />
+					<span>{{ item.title }}</span>
+			  </span>
+				<template v-for="menu2 in item.children">
+            <a-menu-item v-if="!hasChildren(menu2)" :key="menu2.key">
+                <a-icon :type="menu2.icon" />
+                <span>{{ menu2.title }}</span>
+            </a-menu-item>
+						<a-sub-menu v-else :key="menu2.key">
+								<span slot="title">
+							    <a-icon :type="menu2.icon" />
+									<span>{{ menu2.title }}</span>
+							  </span>
+								<template v-for="menu3 in menu2.children">
+                    <a-menu-item v-if="!hasChildren(menu3)" :key="menu3.key">
+                        <a-icon :type="menu3.icon" />
+                        <span>{{ menu3.title }}</span>
+                    </a-menu-item>
+								</template>
+						</a-sub-menu>
+				</template>
+			</a-sub-menu>
+	</template>	
+</a-menu>
+	`
     };
 });

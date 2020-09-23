@@ -1,7 +1,7 @@
 define(["require", "exports", "js/common/utils/TreeUtils", "./SMenu"], function (require, exports, TreeUtils_1, SMenu_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var Logo = {
+    const Logo = {
         props: {
             title: {
                 type: String,
@@ -14,12 +14,18 @@ define(["require", "exports", "js/common/utils/TreeUtils", "./SMenu"], function 
                 required: false
             }
         },
-        template: "\n  <div class=\"system-logo\">\n    <a>\n      <h1 v-if=\"showTitle\">{{ title }}</h1>\n    </a>\n  </div>\n  "
+        template: `
+  <div class="system-logo">
+    <a>
+      <h1 v-if="showTitle">{{ title }}</h1>
+    </a>
+  </div>
+  `
     };
     exports.default = {
         components: {
             SMenu: SMenu_1.default,
-            Logo: Logo
+            Logo
         },
         props: {
             mode: {
@@ -38,15 +44,25 @@ define(["require", "exports", "js/common/utils/TreeUtils", "./SMenu"], function 
                 default: false
             }
         },
-        data: function () {
+        data() {
             return {};
         },
         computed: {
-            computedUserMenuTree: function () {
-                var userMenuList = window.busVue.userMenuList || [];
+            computedUserMenuTree() {
+                const userMenuList = window.busVue.userMenuList || [];
                 return TreeUtils_1.default.convertList2Tree(userMenuList, ['key', 'parentKey'], '0');
             }
         },
-        template: "\n<a-layout-sider\n  :class=\"['sider', 'ant-fixed-sidemenu']\"\n  width=\"256px\"\n  v-model=\"collapsed\"\n  :collapsible=\"collapsible\"\n  :trigger=\"null\">\n  <Logo/>\n  <SMenu style=\"padding: 16px 0\" :menuList=\"computedUserMenuTree\"></SMenu>\n</a-layout-sider>\n  "
+        template: `
+<a-layout-sider
+  :class="['sider', 'ant-fixed-sidemenu']"
+  width="256px"
+  v-model="collapsed"
+  :collapsible="collapsible"
+  :trigger="null">
+  <Logo/>
+  <SMenu style="padding: 16px 0" :menuList="computedUserMenuTree"></SMenu>
+</a-layout-sider>
+  `
     };
 });

@@ -1,7 +1,7 @@
-define(["require", "exports", "js/system/layout/menu/SideMenu", "js/system/layout/main/MainLayout", "js/system/mixins/ThemeMixins"], function (require, exports, SideMenu_1, MainLayout_1, ThemeMixins_1) {
+define(["require", "exports", "js/system/layout/menu/SideMenu", "js/system/layout/main/MainLayout", "js/system/mixins/ThemeMixins", "js/common/utils/DataApiService"], function (require, exports, SideMenu_1, MainLayout_1, ThemeMixins_1, DataApiService_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var testUserMenuList = [
+    const testUserMenuList = [
         {
             key: '1',
             title: '系统管理',
@@ -12,7 +12,7 @@ define(["require", "exports", "js/system/layout/menu/SideMenu", "js/system/layou
             key: '2',
             title: '用户管理',
             icon: 'user',
-            path: '/ui/common?page=system/pages/user/UserManagerPage',
+            path: '/ui/common?page=js/system/pages/user/UserManagerPage',
             parentKey: '1'
         },
         {
@@ -54,25 +54,46 @@ define(["require", "exports", "js/system/layout/menu/SideMenu", "js/system/layou
             SideMenu: SideMenu_1.default,
             MainLayout: MainLayout_1.default
         },
-        mounted: function () {
+        mounted() {
             this.loadUserMenus();
         },
         computed: {
-            computedBus: function () {
+            computedBus() {
                 return window.busVue;
             },
-            computedCollapsed: function () {
+            computedCollapsed() {
                 return !this.computedBus.sidebar.opened;
             }
         },
         methods: {
-            loadUserMenus: function () {
-                var _this = this;
-                return new Promise(function () {
-                    _this.computedBus.userMenuList = testUserMenuList;
-                });
+            loadUserMenus() {
+                if (this.computedBus.userMenuList.length === 0) {
+                    DataApiService_1.default.postAjax('sys/user/listUserMenu')
+                        .then(data => {
+                        this.computedBus.userMenuList = data.map(item => {
+                            return {
+                                key: item.functionId + '',
+                                title: item.functionName,
+                                icon: item.icon,
+                                path: item.url,
+                                parentKey: item.parentId + '',
+                                data: item
+                            };
+                        });
+                    }).catch(error => {
+                        console.error(error);
+                        this.$message.error('加载用户菜单失败');
+                    });
+                }
             }
         },
-        template: "\n      <a-layout :class=\"['layout', 'smart-base-layout']\">\n          <SideMenu\n            :collapsed=\"computedCollapsed\"/>\n          <MainLayout\n            :style=\"{ paddingLeft: computedSidebarWidth + 'px', minHeight: '100vh' }\"/>\n      </a-layout>\n\t"
+        template: `
+      <a-layout :class="['layout', 'smart-base-layout']">
+          <SideMenu
+            :collapsed="computedCollapsed"/>
+          <MainLayout
+            :style="{ paddingLeft: computedSidebarWidth + 'px', minHeight: '100vh' }"/>
+      </a-layout>
+	`
     };
 });

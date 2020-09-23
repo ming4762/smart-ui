@@ -3,10 +3,10 @@ define(["require", "exports"], function (require, exports) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = {
         computed: {
-            computedBus: function () {
+            computedBus() {
                 return window.busVue;
             },
-            computedSidebarWidth: function () {
+            computedSidebarWidth() {
                 return this.computedBus.sidebar.opened ? 256 : 80;
             }
         }

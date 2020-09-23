@@ -19797,6 +19797,18 @@ module.exports = __webpack_require__("051b");
 
 /***/ }),
 
+/***/ "bb2f":
+/***/ (function(module, exports, __webpack_require__) {
+
+var fails = __webpack_require__("d039");
+
+module.exports = !fails(function () {
+  return Object.isExtensible(Object.preventExtensions({}));
+});
+
+
+/***/ }),
+
 /***/ "bb71":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -28769,6 +28781,29 @@ $({ target: 'Object', stat: true, sham: !DESCRIPTORS }, {
 
 /***/ }),
 
+/***/ "dca8":
+/***/ (function(module, exports, __webpack_require__) {
+
+var $ = __webpack_require__("23e7");
+var FREEZING = __webpack_require__("bb2f");
+var fails = __webpack_require__("d039");
+var isObject = __webpack_require__("861d");
+var onFreeze = __webpack_require__("f183").onFreeze;
+
+var nativeFreeze = Object.freeze;
+var FAILS_ON_PRIMITIVES = fails(function () { nativeFreeze(1); });
+
+// `Object.freeze` method
+// https://tc39.github.io/ecma262/#sec-object.freeze
+$({ target: 'Object', stat: true, forced: FAILS_ON_PRIMITIVES, sham: !FREEZING }, {
+  freeze: function freeze(it) {
+    return nativeFreeze && isObject(it) ? nativeFreeze(onFreeze(it)) : it;
+  }
+});
+
+
+/***/ }),
+
 /***/ "ddb0":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -30662,6 +30697,74 @@ module.exports.f = function (C) {
 
 /***/ }),
 
+/***/ "f183":
+/***/ (function(module, exports, __webpack_require__) {
+
+var hiddenKeys = __webpack_require__("d012");
+var isObject = __webpack_require__("861d");
+var has = __webpack_require__("5135");
+var defineProperty = __webpack_require__("9bf2").f;
+var uid = __webpack_require__("90e3");
+var FREEZING = __webpack_require__("bb2f");
+
+var METADATA = uid('meta');
+var id = 0;
+
+var isExtensible = Object.isExtensible || function () {
+  return true;
+};
+
+var setMetadata = function (it) {
+  defineProperty(it, METADATA, { value: {
+    objectID: 'O' + ++id, // object ID
+    weakData: {}          // weak collections IDs
+  } });
+};
+
+var fastKey = function (it, create) {
+  // return a primitive with prefix
+  if (!isObject(it)) return typeof it == 'symbol' ? it : (typeof it == 'string' ? 'S' : 'P') + it;
+  if (!has(it, METADATA)) {
+    // can't set metadata to uncaught frozen object
+    if (!isExtensible(it)) return 'F';
+    // not necessary to add metadata
+    if (!create) return 'E';
+    // add missing metadata
+    setMetadata(it);
+  // return object ID
+  } return it[METADATA].objectID;
+};
+
+var getWeakData = function (it, create) {
+  if (!has(it, METADATA)) {
+    // can't set metadata to uncaught frozen object
+    if (!isExtensible(it)) return true;
+    // not necessary to add metadata
+    if (!create) return false;
+    // add missing metadata
+    setMetadata(it);
+  // return the store of weak collections IDs
+  } return it[METADATA].weakData;
+};
+
+// add metadata on freeze-family methods calling
+var onFreeze = function (it) {
+  if (FREEZING && meta.REQUIRED && isExtensible(it) && !has(it, METADATA)) setMetadata(it);
+  return it;
+};
+
+var meta = module.exports = {
+  REQUIRED: false,
+  fastKey: fastKey,
+  getWeakData: getWeakData,
+  onFreeze: onFreeze
+};
+
+hiddenKeys[METADATA] = true;
+
+
+/***/ }),
+
 /***/ "f260":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -31383,8 +31486,36 @@ var es_object_to_string = __webpack_require__("d3b7");
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.promise.js
 var es_promise = __webpack_require__("e6cf");
 
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.freeze.js
+var es_object_freeze = __webpack_require__("dca8");
+
 // CONCATENATED MODULE: ./packages/form/src/FormItem.jsx
 
+
+
+
+
+
+/**
+ * 字段类型
+ * @type {Readonly<{number: string, input: string, boolean: string, textarea: string, "time-picker": string, "datetime-picker": string, "date-picker": string, "month-picker": string}>}
+ */
+var COLUMN_TYPE = Object.freeze({
+  boolean: 'boolean',
+  number: 'number',
+  input: 'input',
+  textarea: 'textarea',
+  timePicker: 'time-picker',
+  monthPicker: 'month-picker',
+  datePicker: 'date-picker',
+  datetimePicker: 'datetime-picker',
+  radio: 'radio',
+  radioButton: 'radio-button',
+  select: 'select',
+  // 滑动输入条
+  slider: 'slider',
+  rate: 'rate'
+});
 /* harmony default export */ var FormItem = ({
   name: 's-form-item',
   props: {
@@ -31467,7 +31598,7 @@ var es_promise = __webpack_require__("e6cf");
       }
 
       switch (column.type) {
-        case 'boolean':
+        case COLUMN_TYPE.boolean:
           return h("a-switch", {
             "directives": [{
               name: "decorator",
@@ -31478,7 +31609,7 @@ var es_promise = __webpack_require__("e6cf");
             }
           });
 
-        case 'number':
+        case COLUMN_TYPE.number:
           return h("a-input-number", {
             "directives": [{
               name: "decorator",
@@ -31489,7 +31620,7 @@ var es_promise = __webpack_require__("e6cf");
             }
           });
 
-        case 'input':
+        case COLUMN_TYPE.input:
           return h("a-input", {
             "attrs": {
               "placeholder": getPlaceholder(column),
@@ -31501,7 +31632,7 @@ var es_promise = __webpack_require__("e6cf");
             }]
           });
 
-        case 'textarea':
+        case COLUMN_TYPE.textarea:
           return h("a-textarea", {
             "attrs": {
               "placeholder": getPlaceholder(column),
@@ -31513,7 +31644,7 @@ var es_promise = __webpack_require__("e6cf");
             }]
           });
 
-        case 'time-picker':
+        case COLUMN_TYPE.timePicker:
           return h("a-time-picker", {
             "attrs": {
               "placeholder": getPlaceholder(column),
@@ -31525,7 +31656,7 @@ var es_promise = __webpack_require__("e6cf");
             }]
           });
 
-        case 'month-picker':
+        case COLUMN_TYPE.monthPicker:
           return h("a-month-picker", {
             "attrs": {
               "placeholder": getPlaceholder(column),
@@ -31536,9 +31667,44 @@ var es_promise = __webpack_require__("e6cf");
               value: getDecorator(column)
             }]
           });
+
+        case COLUMN_TYPE.slider:
+          {
+            // slider类型
+            var sliderData = {};
+            var dict = column.dict || [];
+            dict.forEach(function (_ref) {
+              var key = _ref.key,
+                  value = _ref.value;
+              sliderData[key] = value;
+            });
+            return h("a-slider", {
+              "attrs": {
+                "placeholder": getPlaceholder(column),
+                "disabled": column.disabled,
+                "marks": sliderData
+              },
+              "directives": [{
+                name: "decorator",
+                value: getDecorator(column)
+              }]
+            });
+          }
+
+        case COLUMN_TYPE.rate:
+          return h("a-rate", {
+            "directives": [{
+              name: "decorator",
+              value: getDecorator(column)
+            }],
+            "attrs": {
+              "allowHalf": true,
+              "disabled": column.disabled
+            }
+          });
       }
 
-      if (column.type === 'date-picker' || column.type === 'datetime-picker') {
+      if (column.type === COLUMN_TYPE.datePicker || column.type === COLUMN_TYPE.datetimePicker) {
         return h("a-date-picker", {
           "attrs": {
             "placeholder": getPlaceholder(column),
@@ -31550,6 +31716,69 @@ var es_promise = __webpack_require__("e6cf");
             value: getDecorator(column)
           }]
         });
+      } // 遍历按钮组
+
+
+      if (column.type === COLUMN_TYPE.radio || column.type === COLUMN_TYPE.radioButton) {
+        var _dict = column.dict || [];
+
+        return h("a-radio-group", {
+          "directives": [{
+            name: "decorator",
+            value: getDecorator(column)
+          }],
+          "attrs": {
+            "disabled": column.disabled
+          }
+        }, [_dict.map(function (_ref2) {
+          var key = _ref2.key,
+              value = _ref2.value,
+              disabled = _ref2.disabled;
+
+          if (column.type === COLUMN_TYPE.radio) {
+            return h("a-radio", {
+              "key": key,
+              "attrs": {
+                "disabled": disabled === true,
+                "value": key
+              }
+            }, [value]);
+          } else {
+            return h("a-radio-button", {
+              "key": key,
+              "attrs": {
+                "disabled": disabled === true,
+                "value": key
+              }
+            }, [value]);
+          }
+        })]);
+      } // select 类型
+
+
+      if (column.type === COLUMN_TYPE.select) {
+        var _dict2 = column.dict || [];
+
+        return h("a-select", {
+          "attrs": {
+            "allowClear": true,
+            "placeholder": getPlaceholder(column),
+            "disabled": column.disabled
+          },
+          "directives": [{
+            name: "decorator",
+            value: getDecorator(column)
+          }]
+        }, [_dict2.map(function (_ref3) {
+          var key = _ref3.key,
+              value = _ref3.value,
+              disabled = _ref3.disabled;
+          return h("a-select-option", {
+            "attrs": {
+              "value": key
+            }
+          }, [value]);
+        })]);
       }
     }()]);
   }
@@ -33710,6 +33939,9 @@ var defaultFormCols = {
   beforeMount: function beforeMount() {
     this.setDefaultValue();
   },
+  mounted: function mounted() {
+    this.$emit('beforeMount', this);
+  },
   beforeUpdate: function beforeUpdate() {
     this.setDefaultValue();
   },
@@ -35241,6 +35473,13 @@ var defaultPagination = {
     deleteUrl: String,
     // 查询URL
     getUrl: String,
+    // 请求地址
+    url: {
+      type: Object,
+      default: function _default() {
+        return {};
+      }
+    },
     // 表格对应实体类的key
     keys: {
       type: Array,
@@ -35493,16 +35732,12 @@ var defaultPagination = {
           top: true
         }
       };
-      var defaultButton = this.defaultButtonConfig;
+      var defaultButton = this.defaultButtonConfig || {};
 
-      if (defaultButton) {
-        for (var key in result) {
-          if (defaultButton[key]) {
-            var showConfig = this.isButtonShow(defaultButton[key], result[key].top, result[key].row);
-            result[key].top = showConfig[0];
-            result[key].row = showConfig[1];
-          }
-        }
+      for (var key in result) {
+        var showConfig = this.isButtonShow(defaultButton[key], result[key].top, result[key].row);
+        result[key].top = showConfig[0];
+        result[key].row = showConfig[1];
       }
 
       return result;
@@ -35540,6 +35775,22 @@ var defaultPagination = {
     }
   },
   methods: {
+    getQueryUrl: function getQueryUrl() {
+      return this.url.query || this.queryUrl;
+    },
+    getDeleteUrl: function getDeleteUrl() {
+      return this.url.delete || this.deleteUrl;
+    },
+    getSaveUrl: function getSaveUrl() {
+      return this.url.save || this.saveUpdateUrl;
+    },
+    getUpdateUrl: function getUpdateUrl() {
+      return this.url.update || this.saveUpdateUrl;
+    },
+    getOneUrl: function getOneUrl() {
+      return this.url.get;
+    },
+
     /**
      * 转换配置信息
      */
@@ -35685,16 +35936,17 @@ var defaultPagination = {
           onOk: function onOk() {
             // 执行删除操作
             var deletePromise;
+            var deleteUrl = $this.getDeleteUrl();
 
             if ($this.deleteHandler) {
-              deletePromise = $this.deleteHandler($this.deleteUrl, deleteList, rowList);
+              deletePromise = $this.deleteHandler(deleteUrl, deleteList, rowList);
             } else {
-              if (!$this.deleteUrl) {
+              if (!deleteUrl) {
                 this.$message.error(t('smart.table.noDeleteUrl'));
                 return false;
               }
 
-              deletePromise = $this.apiService.postAjax($this.deleteUrl, deleteList);
+              deletePromise = $this.apiService.postAjax(deleteUrl, deleteList);
             }
 
             return deletePromise.then(function (data) {
@@ -35750,9 +36002,9 @@ var defaultPagination = {
       var resultPromise;
 
       if (this.queryHandler) {
-        resultPromise = this.queryHandler(this.queryUrl, parameter);
+        resultPromise = this.queryHandler(this.getQueryUrl(), parameter);
       } else {
-        resultPromise = this.apiService.postAjax(this.queryUrl, parameter);
+        resultPromise = this.apiService.postAjax(this.getQueryUrl(), parameter);
       }
 
       resultPromise.then(function (data) {
@@ -35893,16 +36145,30 @@ var defaultPagination = {
 
           var model = _this4.saveUpdateFormatter ? _this4.saveUpdateFormatter(Object.assign({}, data), _this4.addEditDialog.isAdd ? 'add' : 'edit') : data;
 
+          var saveUrl = _this4.getSaveUrl();
+
+          var updateUrl = _this4.getUpdateUrl();
+
           if (_this4.saveUpdateHandler) {
-            return _this4.saveUpdateHandler(_this4.saveUpdateUrl, model, _this4.addEditDialog.isAdd ? 'add' : 'edit');
+            return _this4.saveUpdateHandler(_this4.addEditDialog.isAdd ? saveUrl : updateUrl, model, _this4.addEditDialog.isAdd ? 'add' : 'edit');
           } else {
-            if (!_this4.saveUpdateUrl) {
-              _this4.$message.error('未设置添加保存url：saveUpdateUrl，无法执行保存修改');
+            var errorMessage = null;
+
+            if (_this4.addEditDialog.isAdd && !saveUrl) {
+              errorMessage = '未设置添加url，无法执行保存';
+            }
+
+            if (!_this4.addEditDialog.isAdd && !updateUrl) {
+              errorMessage = '未设置更新url，无法执行更新';
+            }
+
+            if (errorMessage !== null) {
+              _this4.$message.error(errorMessage);
 
               return Promise.reject(noUrlError);
             }
 
-            return _this4.apiService.postAjax(_this4.saveUpdateUrl, model);
+            return _this4.apiService.postAjax(_this4.addEditDialog.isAdd ? saveUrl : updateUrl, model);
           }
         } else {
           return Promise.reject(validateError);
@@ -35942,33 +36208,55 @@ var defaultPagination = {
     },
 
     /**
-     * 添加编辑弹窗显示
+     * 添加修改弹窗form创建完毕事件
+     * @param formVue
      */
-    handleAddEditDialogShow: function handleAddEditDialogShow(ident, row) {
+    handleAddEditFormCreate: function handleAddEditFormCreate(formVue) {
+      var _this$addEditProperti = this.addEditProperties,
+          row = _this$addEditProperti.row,
+          ident = _this$addEditProperti.ident;
+      this.addEditDialogShowMethods(ident, row, formVue);
+      this.addEditProperties = {};
+    },
+    addEditDialogShowMethods: function addEditDialogShowMethods(ident, row, formVue) {
       var _this5 = this;
 
-      // 显示弹窗
-      this.addEditDialog.visible = true; // 回调函数
+      var $this = this; // 回调函数
 
       var callBack = function callBack(model) {
         _this5.oldAddEditModel = Object.assign({}, row);
 
         if (model) {
-          _this5.getAddEditFormVue().setFieldsValue(model);
+          formVue.form.setFieldsValue(model);
         } else {
-          _this5.getOne(ident, row);
+          $this.getOne(ident, row);
         }
       }; // 重置表单
 
 
-      if (this.getAddEditFormVue()) {
-        this.getAddEditFormVue().reset();
-      }
+      formVue.reset();
 
       if (!this.$listeners[EVENTS.ADD_EDIT_DIALOG_SHOW]) {
         callBack(null);
       } else {
-        this.$emit(EVENTS.ADD_EDIT_DIALOG_SHOW, ident, this.getAddEditFormVue().getFieldsValue(), callBack, row);
+        this.$emit(EVENTS.ADD_EDIT_DIALOG_SHOW, ident, formVue.getFormModel(), callBack, row);
+      }
+    },
+
+    /**
+     * 添加编辑弹窗显示
+     */
+    handleAddEditDialogShow: function handleAddEditDialogShow(ident, row) {
+      // 显示弹窗
+      this.addEditDialog.visible = true;
+
+      if (!this.getAddEditFormVue()) {
+        this.addEditProperties = {
+          row: row,
+          ident: ident
+        };
+      } else {
+        this.addEditDialogShowMethods(ident, row, this.getAddEditFormVue());
       }
     },
 
@@ -35980,7 +36268,7 @@ var defaultPagination = {
 
       if (ident === EDIT) {
         // 是否有get url
-        var get = !!this.getUrl;
+        var get = !!this.getOneUrl();
         var parameters = {};
 
         if (get) {
@@ -35998,11 +36286,12 @@ var defaultPagination = {
         } // 执行查询
 
 
-        this.apiService.postAjax(get ? this.getUrl : this.queryUrl, parameters).then(function (result) {
+        this.apiService.postAjax(get ? this.getOneUrl() : this.getQueryUrl(), parameters).then(function (result) {
           if (result) {
             $this.getAddEditFormVue().getForm().setFieldsValue(get ? result : result.length === 1 ? result[0] : {});
           }
         }).catch(function (error) {
+          // todo:I18N
           $this.errorMessage('查询发生错误', error);
         });
       }
@@ -36076,15 +36365,23 @@ var defaultPagination = {
      * @returns {boolean[]}
      */
     isButtonShow: function isButtonShow(buttonConfig, topShow, rowShow) {
-      if (buttonConfig.rowShow === false || !validatePermission(buttonConfig.permission, this.permissions)) {
-        rowShow = false;
+      // 行按钮处理
+      var rowDefault = rowShow;
+
+      if (buttonConfig !== undefined && buttonConfig.rowShow !== undefined) {
+        rowDefault = buttonConfig.rowShow;
       }
 
-      if (buttonConfig.topShow === false || !validatePermission(buttonConfig.permission, this.permissions)) {
-        topShow = false;
+      var row = [rowDefault, validatePermission(buttonConfig === undefined ? null : buttonConfig.permission, this.permissions)]; // 顶部按钮处理
+
+      var topDefault = topShow;
+
+      if (buttonConfig !== undefined && buttonConfig.topShow !== undefined) {
+        topDefault = buttonConfig.topShow;
       }
 
-      return [topShow, rowShow];
+      var top = [topDefault, validatePermission(buttonConfig === undefined ? null : buttonConfig.permission, this.permissions)];
+      return [top[0] && top[1], row[0] && row[1]];
     },
 
     /**
@@ -36383,6 +36680,9 @@ var defaultPagination = {
       }]), [h("s-form", helper_default()([{}, {
         scopedSlots: this.createAddEditScopeSlots()
       }, {
+        "on": {
+          "beforeMount": this.handleAddEditFormCreate
+        },
         "attrs": {
           "layout": this.addEditFormlayout,
           "defaultSpan": this.addEditFormSpan,
@@ -36537,7 +36837,7 @@ var defaultPagination = {
               "attrs": {
                 "type": _this11.rowAddButtonType,
                 "size": "small",
-                "icon": "plus"
+                "icon": _this11.textRowButton ? '' : 'plus'
               },
               "style": "width: 50px; margin-right: 5px",
               "on": {

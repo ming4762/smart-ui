@@ -2,6 +2,8 @@ import SideMenu from 'js/system/layout/menu/SideMenu'
 import MainLayout from 'js/system/layout/main/MainLayout'
 
 import ThemeMixins from 'js/system/mixins/ThemeMixins'
+// @ts-ignore
+import DataApiService from 'js/common/utils/DataApiService'
 
 const testUserMenuList: Array<any> = [
 	{
@@ -14,7 +16,7 @@ const testUserMenuList: Array<any> = [
 		key: '2',
 		title: '用户管理',
 		icon: 'user',
-		path: '/ui/common?page=system/pages/user/UserManagerPage',
+		path: '/ui/common?page=js/system/pages/user/UserManagerPage',
 		parentKey: '1'
 	},
 	{
@@ -80,10 +82,24 @@ export default {
 		 * 加载用户菜单信息
 		 */
 		loadUserMenus () {
-			return new Promise(() => {
-				// @ts-ignore
-				this.computedBus.userMenuList = testUserMenuList
-			})
+			if (this.computedBus.userMenuList.length === 0) {
+				DataApiService.postAjax('sys/user/listUserMenu')
+					.then(data => {
+						this.computedBus.userMenuList = data.map(item => {
+							return {
+								key: item.functionId + '',
+								title: item.functionName,
+								icon: item.icon,
+								path: item.url,
+								parentKey: item.parentId + '',
+								data: item
+							}
+						})
+					}).catch(error => {
+					console.error(error)
+					this.$message.error('加载用户菜单失败')
+				})
+			}
 		}
 	},
 	// language=html
