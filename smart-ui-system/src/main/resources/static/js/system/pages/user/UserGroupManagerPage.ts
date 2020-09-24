@@ -265,6 +265,7 @@ const page = {
               </template>
               <template v-slot:row-operation="{text, record}">
                   <a-button @click="handleShowSetUser(record)" type="link">设置用户</a-button>
+                  <a-button @click="handleShowSetRole(record)" type="link">设置角色</a-button>
               </template>
           </s-table-crud>
 

@@ -19,7 +19,8 @@ define(["require", "exports", "js/common/utils/ModuleLoader", "js/common/PageBui
         template: `
 	<div style="padding: 10px; background:  rgba(0, 21, 41, 0.08)" >
       <div style="background: white; overflow:auto">
-          <UserList/>
+          <UserList
+                  :row-selection="{}"/>
       </div>	
 	</div>
 	`

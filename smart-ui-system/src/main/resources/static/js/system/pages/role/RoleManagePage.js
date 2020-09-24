@@ -1,6 +1,7 @@
 define(["require", "exports", "js/common/PageBuilder", "js/common/utils/ModuleLoader", "js/common/utils/DataApiService"], function (require, exports, PageBuilder_1, ModuleLoader_1, DataApiService_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    DataApiService_1.default.init401ErrorHandler();
     let moment = window['moment'];
     class RoleManagePage extends PageBuilder_1.default {
         init() {
