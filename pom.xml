@@ -18,7 +18,9 @@
 
     <modules>
         <module>smart-ui-common</module>
+        <module>smart-ui-component</module>
         <module>smart-ui-library</module>
+        <module>smart-ui-plugins</module>
         <module>smart-ui-system</module>
     </modules>
 
