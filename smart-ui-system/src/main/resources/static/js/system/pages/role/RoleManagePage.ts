@@ -5,6 +5,8 @@ import moduleLoader from 'js/common/utils/ModuleLoader'
 // @ts-ignore
 import DataApiService from 'js/common/utils/DataApiService'
 
+DataApiService.init401ErrorHandler()
+
 
 let moment: Function = window['moment']
 /**

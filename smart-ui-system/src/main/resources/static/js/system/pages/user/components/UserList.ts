@@ -13,6 +13,35 @@ const sexMap: {[index: number]: string} = {
 	2: '女',
 	3: '未知'
 }
+
+const statusDict = Object.freeze(
+	[
+		{
+			key: '10',
+			value: '启用',
+			color: '#108ee9'
+		},
+		{
+			key: '20',
+			value: '禁用',
+			color: '#f50'
+		}
+	]
+)
+
+const typeDict = Object.freeze([
+	{
+		key: '10',
+		value: '系统用户',
+		color: '#108ee9'
+	},
+	{
+		key: '20',
+		value: '业务用户',
+		color: '#f50'
+	}
+])
+
 /**
  *
  * @author shizhongming
@@ -20,7 +49,23 @@ const sexMap: {[index: number]: string} = {
  */
 export default {
 	data () {
+		const sexDict = Object.keys(sexMap).map(key => {
+			return {
+				key: key + '',
+				value: sexMap[key]
+			}
+		})
+		const statusDictMap = {}
+		statusDict.forEach(item => {
+			statusDictMap[item.key] = item
+		})
+		const typeDictMap = {}
+		typeDict.forEach(item => {
+			typeDictMap[item.key] = item
+		})
 		return {
+			statusDictMap: statusDictMap,
+			typeDictMap: typeDictMap,
 			columns: [
 				{
 					label: '用户ID',
@@ -77,7 +122,11 @@ export default {
 						width: 80,
 						scopedSlots: { customRender: 'table-userSex' },
 						sorter: true
-					}
+					},
+					form: {
+						dict: sexDict
+					},
+					type: 'radio'
 				},
 				{
 					label: '生日',
@@ -105,15 +154,29 @@ export default {
 					label: '状态',
 					prop: 'status',
 					table: {
-						width: 120
-					}
+						width: 120,
+						scopedSlots: { customRender: 'table-status' },
+						sorter: true
+					},
+					form: {
+						defaultValue: '10',
+						dict: statusDict
+					},
+					type: 'radio'
 				},
 				{
 					label: '用户类型',
 					prop: 'userType',
 					table: {
-						width: 120
-					}
+						width: 120,
+						scopedSlots: { customRender: 'table-userType' },
+						sorter: true
+					},
+					form: {
+						defaultValue: '10',
+						dict: typeDict
+					},
+					type: 'radio'
 				},
 				{
 					label: '职务',
@@ -196,7 +259,13 @@ export default {
 				}
 			],
 			apiService: DataApiService,
-			sexMap: sexMap
+			sexMap: sexMap,
+			currentUser: null,
+			setRoleModalVisible: false,
+			setRoleLoading: false,
+			// 角色列表
+			roleList: [],
+			selectedRoleIdList: []
 		}
 	},
 	methods: {
@@ -220,42 +289,132 @@ export default {
 		},
 		getTableVue () {
 			return this.$refs['table']
+		},
+		/**
+		 * 显示设置角色
+		 * @param record
+		 */
+		handleShowSetRole (record) {
+			this.currentUser = record
+			this.loadAllRole()
+			this.loadRoleByUser(record.userId)
+			this.setRoleModalVisible = true
+		},
+		/**
+		 * 设置角色
+		 */
+		handleSetRole () {
+			this.setRoleLoading = true
+			const { selectedRoleIdList, currentUser: { userId } } = this
+			DataApiService.postAjax('sys/user/setRole', {
+				userId: userId,
+				roleIdList: selectedRoleIdList
+			}).then(data => {
+				this.selectedRoleIdList = []
+				this.$message.success('设置角色成功')
+				this.setRoleModalVisible = false
+			}).catch(error => {
+				console.error(error)
+				this.$message.error('设置角色发生错误')
+			}).finally(() => {
+				this.setRoleLoading = false
+			})
+		},
+		/**
+		 * 加载用户的角色信息
+		 * @param userId
+		 */
+		loadRoleByUser (userId: number) {
+			DataApiService.postAjax('sys/user/listRoleId', userId)
+				.then(data => {
+					this.selectedRoleIdList = data.map(item => item + '')
+				}).catch(error => {
+					console.error(error)
+					this.$message.error('加载用户角色失败' + error.message)
+			})
+		},
+		/**
+		 * 加载所有角色信息
+		 */
+		loadAllRole () {
+			if (this.roleList.length === 0) {
+				DataApiService.postAjax('sys/role/list')
+					.then(data => {
+						this.roleList = data.map(({ roleId, roleName }) => {
+							return {
+								key: roleId + '',
+								title: roleName
+							}
+						})
+					}).catch(error => {
+						console.error(error)
+						this.$message.error('加载角色列表失败', error.message)
+				})
+			}
+		},
+		handleSelectRole (targetKeys) {
+			this.selectedRoleIdList = targetKeys
 		}
 	},
 	// language=html
-	template: `
-  <s-table-crud
-				  ref="table"
-				  v-bind="$attrs"
-          :keys="['userId']"
-          size="middle"
-          :pagination="{}"
-          :addEditFormSpan="12"
-          :opreaColumnWidth="140"
-          :scroll="{ x: 1800 }"
-          showIndex
-          :api-service="apiService"
-				  :url="{
-				  	query: 'sys/user/list'
-				  }"
-          text-row-button
-          :bordered="false"
-          :columns="columns">
-      <template v-slot:table-userSex="{ text }">
-          <a-tag :color="getSexColor(text)">
-              {{getSexText(text)}}
-          </a-tag>
-      </template>
-      <template v-slot:form-sex="{}">
-          <a-radio-group v-decorator="['sex']">
-              <a-radio
-                      v-for="(value, key) in sexMap"
-                      :key="key"
-                      :value="key">
-                  {{value}}
-              </a-radio>
-          </a-radio-group>
-      </template>
-  </s-table-crud>
+	template: `					
+	<div>
+	  <s-table-crud
+					  ref="table"
+					  v-bind="$attrs"
+	          :keys="['userId']"
+	          size="middle"
+	          :pagination="{}"
+	          :addEditFormSpan="12"
+	          :opreaColumnWidth="220"
+	          :scroll="{ x: 1800 }"
+	          showIndex
+	          :api-service="apiService"
+					  :url="{
+					    query: 'sys/user/list',
+					    save: 'sys/user/save',
+					    update: 'sys/user/update',
+					    delete: 'sys/user/batchDeleteById'
+					  }"
+	          text-row-button
+	          :bordered="false"
+	          :columns="columns">
+	      <template v-slot:table-userSex="{ text }">
+	          <a-tag :color="getSexColor(text)">
+	              {{getSexText(text)}}
+	          </a-tag>
+	      </template>
+			  <template v-slot:table-status="{ text }">
+	          <a-tag :color="statusDictMap[text].color">
+	              {{statusDictMap[text].value}}
+	          </a-tag>
+			  </template>
+			  <template v-slot:table-userType="{ text }">
+	          <a-tag :color="typeDictMap[text].color">
+	              {{typeDictMap[text].value}}
+	          </a-tag>
+			  </template>
+			  <template v-slot:row-operation="{record}">
+					  <a-button @click="handleShowSetRole(record)" type="link">设置角色</a-button>
+			  </template>
+	  </s-table-crud>
+	  <a-modal
+	          title="设置角色"
+	          :confirm-loading="setRoleLoading"
+	          :width="450"
+	          @ok="handleSetRole"
+	          @cancel="setRoleModalVisible = false"
+	          :visible="setRoleModalVisible">
+	      <a-transfer
+          :list-style="{
+						height: '400px'
+					}"
+          @change="handleSelectRole"
+          :render="item => item.title"
+          :target-keys="selectedRoleIdList"
+          :data-source="roleList"
+          show-search/>
+	  </a-modal>
+  </div>
 	`
 }
