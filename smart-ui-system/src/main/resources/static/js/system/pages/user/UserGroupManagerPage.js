@@ -206,7 +206,7 @@ define(["require", "exports", "js/common/PageBuilder", "js/common/utils/ModuleLo
                   size="middle"
                   :scroll="{ x: 1400 }"
                   :columns="columns"
-                  :opreaColumnWidth="210"
+                  :opreaColumnWidth="330"
                   defaultSearchVisible
                   :rowSelection="{}"
                   text-row-button

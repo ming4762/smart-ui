@@ -245,7 +245,7 @@ const page = {
                   size="middle"
                   :scroll="{ x: 1400 }"
                   :columns="columns"
-                  :opreaColumnWidth="210"
+                  :opreaColumnWidth="330"
                   defaultSearchVisible
                   :rowSelection="{}"
                   text-row-button
