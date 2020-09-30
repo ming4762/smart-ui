@@ -109,7 +109,8 @@ define(["require", "exports", "js/common/utils/DataApiService"], function (requi
                             sorter: true
                         },
                         form: {
-                            dict: sexDict
+                            dict: sexDict,
+                            defaultValue: '3'
                         },
                         type: 'radio'
                     },
@@ -182,6 +183,10 @@ define(["require", "exports", "js/common/utils/DataApiService"], function (requi
                         prop: 'seq',
                         table: {
                             width: 120
+                        },
+                        type: 'number',
+                        form: {
+                            defaultValue: 1
                         }
                     },
                     {

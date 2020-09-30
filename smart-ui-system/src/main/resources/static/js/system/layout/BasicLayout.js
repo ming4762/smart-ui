@@ -70,7 +70,7 @@ define(["require", "exports", "js/system/layout/menu/SideMenu", "js/system/layou
                 if (this.computedBus.userMenuList.length === 0) {
                     DataApiService_1.default.postAjax('sys/user/listUserMenu')
                         .then(data => {
-                        this.computedBus.userMenuList = data.map(item => {
+                        this.computedBus.setUserMenu(data.map(item => {
                             return {
                                 key: item.functionId + '',
                                 title: item.functionName,
@@ -79,7 +79,7 @@ define(["require", "exports", "js/system/layout/menu/SideMenu", "js/system/layou
                                 parentKey: item.parentId + '',
                                 data: item
                             };
-                        });
+                        }));
                     }).catch(error => {
                         console.error(error);
                         this.$message.error('加载用户菜单失败');

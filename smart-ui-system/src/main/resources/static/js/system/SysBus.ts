@@ -74,6 +74,14 @@ const initBus = () => {
 				StoreUtil.setStore(STORE_KEYS.ACTIVE_MENU, menu, StoreUtil.SESSION_TYPE)
 			},
 			/**
+			 * 设置用户菜单
+			 * @param menuList 菜单列表
+			 */
+			setUserMenu (menuList: Array<any>) {
+				this.userMenuList = menuList
+				StoreUtil.setStore(STORE_KEYS.USER_MENU_LIST, menuList, StoreUtil.SESSION_TYPE)
+			},
+			/**
 			 * 关闭全部菜单
 			 */
 			removeAllMenu (removeCurrent: boolean = true): Promise<any> {

@@ -41,6 +41,10 @@ define(["require", "exports", "js/common/utils/StoreUtil", "js/system/constants/
                     this.activeMenu = menu;
                     StoreUtil_1.default.setStore(Constants_1.STORE_KEYS.ACTIVE_MENU, menu, StoreUtil_1.default.SESSION_TYPE);
                 },
+                setUserMenu(menuList) {
+                    this.userMenuList = menuList;
+                    StoreUtil_1.default.setStore(Constants_1.STORE_KEYS.USER_MENU_LIST, menuList, StoreUtil_1.default.SESSION_TYPE);
+                },
                 removeAllMenu(removeCurrent = true) {
                     return new Promise(() => {
                         if (this.openMenuList.length > 1) {

@@ -1,6 +1,8 @@
 // @ts-ignore
 import PageBuilder from 'js/common/PageBuilder'
 import initBus from 'js/system/SysBus'
+// @ts-ignore
+import DataApiService from 'js/common/utils/DataApiService'
 
 import BasicLayout from 'js/system/layout/BasicLayout'
 
@@ -9,6 +11,8 @@ declare global {
         busVue: any
     }
 }
+
+DataApiService.validateLogin()
 
 /**
  *

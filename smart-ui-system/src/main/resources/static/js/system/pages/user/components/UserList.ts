@@ -124,7 +124,8 @@ export default {
 						sorter: true
 					},
 					form: {
-						dict: sexDict
+						dict: sexDict,
+						defaultValue: '3'
 					},
 					type: 'radio'
 				},
@@ -197,6 +198,10 @@ export default {
 					prop: 'seq',
 					table: {
 						width: 120
+					},
+					type: 'number',
+					form: {
+						defaultValue: 1
 					}
 				},
 				{
