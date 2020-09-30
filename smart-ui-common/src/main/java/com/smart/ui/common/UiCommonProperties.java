@@ -19,6 +19,9 @@ public class UiCommonProperties {
     @Setter
     public static class Env {
         private Boolean development = Boolean.FALSE;
+
+        // 后台地址
+        private String apiUrl;
     }
 
 }
