@@ -333,7 +333,7 @@ define(["require", "exports", "js/common/PageBuilder", "js/common/utils/ModuleLo
           </a-layout-content>
           <a-layout-sider
 	          style="margin-left: 5px"
-	          :width="350"
+	          :width="260"
 	          theme="light">
 		          <a-layout class="full-height">
 				          <a-layout-header style="background-color: white; text-align: center; border-bottom: #001529 solid">

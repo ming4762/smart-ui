@@ -45,7 +45,7 @@ const page = {
 		handleSubmit (e: Event) {
 			e.preventDefault()
 			// @ts-ignore
-			this.form.validateFields((err: any, { username, password1 }: any) => {
+			this.form.validateFields((err: any, { username, password: password1 }: any) => {
 				if (!err) {
 					this.state.loginBtn = true
 					const password = Md5Utils.md5(username + password1 + '888888$#@', 2)

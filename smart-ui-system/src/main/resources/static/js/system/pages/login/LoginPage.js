@@ -23,7 +23,7 @@ define(["require", "exports", "js/common/PageBuilder", "js/common/utils/ApiServi
         methods: {
             handleSubmit(e) {
                 e.preventDefault();
-                this.form.validateFields((err, { username, password1 }) => {
+                this.form.validateFields((err, { username, password: password1 }) => {
                     if (!err) {
                         this.state.loginBtn = true;
                         const password = Md5Utils_1.default.md5(username + password1 + '888888$#@', 2);
