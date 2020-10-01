@@ -78,29 +78,29 @@ define(["require", "exports"], function (require, exports) {
 	<template
 		v-for="item in menuList">
       <a-menu-item v-if="!hasChildren(item)" :key="item.key">
-        <a-icon :type="item.icon" />
+        <a-icon v-if="item.icon" :type="item.icon" />
         <span>{{ item.title }}</span>
       </a-menu-item>
 			<a-sub-menu
 				v-else
 				:key="item.key">
 				<span slot="title">
-			    <a-icon :type="item.icon" />
+			    <a-icon v-if="item.icon" :type="item.icon" />
 					<span>{{ item.title }}</span>
 			  </span>
 				<template v-for="menu2 in item.children">
             <a-menu-item v-if="!hasChildren(menu2)" :key="menu2.key">
-                <a-icon :type="menu2.icon" />
+                <a-icon v-if="menu2.icon" :type="menu2.icon" />
                 <span>{{ menu2.title }}</span>
             </a-menu-item>
 						<a-sub-menu v-else :key="menu2.key">
 								<span slot="title">
-							    <a-icon :type="menu2.icon" />
+							    <a-icon v-if="menu2.icon" :type="menu2.icon" />
 									<span>{{ menu2.title }}</span>
 							  </span>
 								<template v-for="menu3 in menu2.children">
                     <a-menu-item v-if="!hasChildren(menu3)" :key="menu3.key">
-                        <a-icon :type="menu3.icon" />
+                        <a-icon v-if="menu3.icon" :type="menu3.icon" />
                         <span>{{ menu3.title }}</span>
                     </a-menu-item>
 								</template>
