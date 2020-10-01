@@ -3,23 +3,29 @@ define(["require", "exports", "./ApiService"], function (require, exports, ApiSe
     Object.defineProperty(exports, "__esModule", { value: true });
     let warningShow = false;
     const loginPath = contextPath + 'ui/system/login';
+    const WARING_LOGIN_SHOW = 'warning_login_show';
+    if (localStorage.getItem(WARING_LOGIN_SHOW) === null) {
+        localStorage.setItem(WARING_LOGIN_SHOW, 'false');
+    }
     const goLogin = () => {
         const win = window.parent.parent;
         if (!!win['antd']) {
-            if (!warningShow) {
-                warningShow = true;
+            if (localStorage.getItem(WARING_LOGIN_SHOW) === 'false') {
+                localStorage.setItem(WARING_LOGIN_SHOW, 'true');
                 win['antd'].Modal.warning({
                     title: '警告',
                     content: '登录超时，请重新登录！',
                     keyboard: false,
                     onOk: () => {
-                        warningShow = false;
+                        sessionStorage.clear();
+                        localStorage.setItem(WARING_LOGIN_SHOW, 'false');
                         win.location.href = loginPath;
                     }
                 });
             }
         }
         else {
+            sessionStorage.clear();
             win.location.href = loginPath;
         }
     };

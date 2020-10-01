@@ -32,7 +32,10 @@
 <script type="text/javascript" th:inline="javascript">
     ready(function () {
         // 设置后台请求地址
-        localStorage.setItem('API_URL', env.apiUrl || '')
+        const API_URL = localStorage.getItem('API_URL')
+        if (!!API_URL || API_URL === '') {
+            localStorage.setItem('API_URL', env.apiUrl || '')
+        }
         require(['js/system/pages/login/LoginPage'], function (module) {
             var page = new module.default()
             page.init()
