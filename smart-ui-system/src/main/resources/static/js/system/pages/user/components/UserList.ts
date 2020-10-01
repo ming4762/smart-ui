@@ -1,6 +1,8 @@
 // @ts-ignore
 import DataApiService from 'js/common/utils/DataApiService'
 
+import UserUtils from '../../../utils/UserUtils'
+
 let moment: Function = window['moment']
 
 DataApiService.init401ErrorHandler()
@@ -66,6 +68,8 @@ export default {
 		return {
 			statusDictMap: statusDictMap,
 			typeDictMap: typeDictMap,
+			// 用户权限
+			permissions: UserUtils.getUserPermissions(),
 			columns: [
 				{
 					label: '用户ID',
@@ -270,10 +274,23 @@ export default {
 			setRoleLoading: false,
 			// 角色列表
 			roleList: [],
-			selectedRoleIdList: []
+			selectedRoleIdList: [],
+			// 默认按钮设置
+			defaultButtonConfig: {
+				edit: {
+					permission: 'sys:user:update'
+				},
+				add: {
+					permission: 'sys:user:save'
+				},
+				delete: {
+					permission: 'sys:user:delete'
+				}
+			}
 		}
 	},
 	methods: {
+		hasPermission: UserUtils.hasPermission,
 		getSexColor (value) {
 			if (value === 1) {
 				return '#108ee9'
@@ -366,6 +383,8 @@ export default {
 	<div>
 	  <s-table-crud
 					  ref="table"
+					  :permissions="permissions"
+					  :defaultButtonConfig="defaultButtonConfig"
 					  v-bind="$attrs"
 	          :keys="['userId']"
 	          size="middle"
@@ -400,7 +419,7 @@ export default {
 	          </a-tag>
 			  </template>
 			  <template v-slot:row-operation="{record}">
-					  <a-button @click="handleShowSetRole(record)" type="link">设置角色</a-button>
+					  <a-button v-if="hasPermission(true, 'sys:user:setRole')" @click="handleShowSetRole(record)" type="link">设置角色</a-button>
 			  </template>
 	  </s-table-crud>
 	  <a-modal

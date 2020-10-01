@@ -11,9 +11,9 @@ import { STORE_KEYS } from '../constants/Constants'
 export default class UserUtils {
 
 	public static saveUserData({user, roles, permissions}: any) {
-		this.saveUser(user)
-		this.saveUserPermissions(permissions)
-		this.saveUserRoles(roles)
+		UserUtils.saveUser(user)
+		UserUtils.saveUserPermissions(permissions)
+		UserUtils.saveUserRoles(roles)
 	}
 
 	public static saveUser(user: any): void {
@@ -37,6 +37,30 @@ export default class UserUtils {
 	}
 
 	public static getUserPermissions(): any {
-		return StoreUtil.getStore(STORE_KEYS.USER_PERMISSIONS)
+		return StoreUtil.getStore(STORE_KEYS.USER_PERMISSIONS) || []
+	}
+
+	/**
+	 * 判断用户是否拥有权限
+	 * @param all 是否保存所有权限
+	 * @param permissions 权限信息
+	 */
+	public static hasPermission (all: boolean = true, ...permissions: Array<string>): boolean {
+		const userPermissions = UserUtils.getUserPermissions()
+		if (userPermissions.length === 0) {
+			return false
+		}
+		if (permissions.length === 0) {
+			return true
+		}
+		if (all) {
+			return permissions.every(permission => {
+				return userPermissions.includes(permission)
+			})
+		} else {
+			return permissions.some(permission => {
+				return userPermissions.includes(permission)
+			})
+		}
 	}
 }

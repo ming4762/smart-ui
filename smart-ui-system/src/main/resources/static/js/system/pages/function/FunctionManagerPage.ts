@@ -8,6 +8,7 @@ import DataApiService from 'js/common/utils/DataApiService'
 import TreeUtils from 'js/common/utils/TreeUtils'
 
 
+DataApiService.init401ErrorHandler()
 
 let moment: Function = window['moment']
 /**
@@ -83,8 +84,16 @@ const page = {
 					label: '功能名称',
 					prop: 'functionName',
 					table: {
-						width: 160,
-						fixed: true
+						width: 220,
+						align: 'left',
+						fixed: true,
+						customHeaderCell: () => {
+							return {
+								props: {
+									align: 'center'
+								}
+							}
+						}
 					},
 					form: {
 						rules: true

@@ -1,6 +1,7 @@
 define(["require", "exports", "js/common/PageBuilder", "js/common/utils/ModuleLoader", "js/common/utils/DataApiService", "js/common/utils/TreeUtils"], function (require, exports, PageBuilder_1, ModuleLoader_1, DataApiService_1, TreeUtils_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    DataApiService_1.default.init401ErrorHandler();
     let moment = window['moment'];
     class FunctionManagerPage extends PageBuilder_1.default {
         init() {
@@ -59,8 +60,16 @@ define(["require", "exports", "js/common/PageBuilder", "js/common/utils/ModuleLo
                         label: '功能名称',
                         prop: 'functionName',
                         table: {
-                            width: 160,
-                            fixed: true
+                            width: 220,
+                            align: 'left',
+                            fixed: true,
+                            customHeaderCell: () => {
+                                return {
+                                    props: {
+                                        align: 'center'
+                                    }
+                                };
+                            }
                         },
                         form: {
                             rules: true

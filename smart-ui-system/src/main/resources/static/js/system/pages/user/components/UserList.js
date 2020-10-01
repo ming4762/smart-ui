@@ -1,4 +1,4 @@
-define(["require", "exports", "js/common/utils/DataApiService"], function (require, exports, DataApiService_1) {
+define(["require", "exports", "js/common/utils/DataApiService", "../../../utils/UserUtils"], function (require, exports, DataApiService_1, UserUtils_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     let moment = window['moment'];
@@ -51,6 +51,7 @@ define(["require", "exports", "js/common/utils/DataApiService"], function (requi
             return {
                 statusDictMap: statusDictMap,
                 typeDictMap: typeDictMap,
+                permissions: UserUtils_1.default.getUserPermissions(),
                 columns: [
                     {
                         label: '用户ID',
@@ -254,10 +255,22 @@ define(["require", "exports", "js/common/utils/DataApiService"], function (requi
                 setRoleModalVisible: false,
                 setRoleLoading: false,
                 roleList: [],
-                selectedRoleIdList: []
+                selectedRoleIdList: [],
+                defaultButtonConfig: {
+                    edit: {
+                        permission: 'sys:user:update'
+                    },
+                    add: {
+                        permission: 'sys:user:save'
+                    },
+                    delete: {
+                        permission: 'sys:user:delete'
+                    }
+                }
             };
         },
         methods: {
+            hasPermission: UserUtils_1.default.hasPermission,
             getSexColor(value) {
                 if (value === 1) {
                     return '#108ee9';
@@ -335,6 +348,8 @@ define(["require", "exports", "js/common/utils/DataApiService"], function (requi
 	<div>
 	  <s-table-crud
 					  ref="table"
+					  :permissions="permissions"
+					  :defaultButtonConfig="defaultButtonConfig"
 					  v-bind="$attrs"
 	          :keys="['userId']"
 	          size="middle"
@@ -369,7 +384,7 @@ define(["require", "exports", "js/common/utils/DataApiService"], function (requi
 	          </a-tag>
 			  </template>
 			  <template v-slot:row-operation="{record}">
-					  <a-button @click="handleShowSetRole(record)" type="link">设置角色</a-button>
+					  <a-button v-if="hasPermission(true, 'sys:user:setRole')" @click="handleShowSetRole(record)" type="link">设置角色</a-button>
 			  </template>
 	  </s-table-crud>
 	  <a-modal
