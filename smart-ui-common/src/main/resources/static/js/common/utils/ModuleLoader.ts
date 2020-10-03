@@ -30,7 +30,7 @@ const moduleMap: { [key: string]: Module } = {
 		]
 	},
 	'vue-ant-table': {
-		name: 'ue-ant-table',
+		name: 'vue-ant-table',
 		js: [
 			'plugins/vue-ant-table/vue-ant-table.umd.min'
 		],
