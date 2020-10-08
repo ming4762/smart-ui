@@ -14,6 +14,16 @@ export default {
 			required: true
 		}
 	},
+	data () {
+		return {
+			menuPaths: {}
+		}
+	},
+	computed: {
+		computedActiveMenu () {
+			return window.busVue.activeMenu
+		}
+	},
 	watch: {
 	},
 	methods: {
@@ -22,6 +32,7 @@ export default {
 		 * @param menu 菜单信息
 		 */
 		getMenuPath (menu: any): string {
+			console.log(menu)
 			return  menu.path
 		}
 	},
