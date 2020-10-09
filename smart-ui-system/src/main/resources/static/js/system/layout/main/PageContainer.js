@@ -12,9 +12,20 @@ define(["require", "exports"], function (require, exports) {
                 required: true
             }
         },
+        data() {
+            return {
+                menuPaths: {}
+            };
+        },
+        computed: {
+            computedActiveMenu() {
+                return window.busVue.activeMenu;
+            }
+        },
         watch: {},
         methods: {
             getMenuPath(menu) {
+                console.log(menu);
                 return menu.path;
             }
         },
