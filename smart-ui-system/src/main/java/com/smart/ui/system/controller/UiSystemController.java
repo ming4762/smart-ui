@@ -11,7 +11,7 @@ import java.util.Map;
  * @author shizhongming
  * 2020/8/29 7:47 下午
  */
-@RequestMapping("ui/system")
+@RequestMapping
 @Controller
 public class UiSystemController {
 
@@ -20,7 +20,7 @@ public class UiSystemController {
      * @param parameter 参数
      * @return modelview
      */
-    @RequestMapping("home")
+    @RequestMapping
     public ModelAndView home(@RequestParam Map<String, String> parameter) {
         return new ModelAndView("system/home", parameter);
     }

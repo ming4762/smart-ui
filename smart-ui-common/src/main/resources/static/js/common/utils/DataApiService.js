@@ -2,14 +2,14 @@ define(["require", "exports", "./ApiService"], function (require, exports, ApiSe
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     let warningShow = false;
-    const loginPath = contextPath + 'ui/system/login';
+    const loginPath = contextPath + 'login';
     const WARING_LOGIN_SHOW = 'warning_login_show';
     if (localStorage.getItem(WARING_LOGIN_SHOW) === null) {
         localStorage.setItem(WARING_LOGIN_SHOW, 'false');
     }
-    const goLogin = () => {
+    const goLogin = (warning = true) => {
         const win = window.parent.parent;
-        if (!!win['antd']) {
+        if (!!win['antd'] && warning) {
             if (localStorage.getItem(WARING_LOGIN_SHOW) === 'false') {
                 localStorage.setItem(WARING_LOGIN_SHOW, 'true');
                 win['antd'].Modal.warning({
@@ -54,14 +54,18 @@ define(["require", "exports", "./ApiService"], function (require, exports, ApiSe
         static init401ErrorHandler() {
             this.errorHandler = errorHandler;
         }
-        static validateLogin() {
+        static validateLogin(warning = true) {
             this.postAjax('auth/isLogin')
                 .then(data => {
                 if (!data) {
-                    goLogin();
+                    goLogin(warning);
+                }
+                else {
+                    return data;
                 }
             }).catch(error => {
-                goLogin();
+                console.error(error);
+                goLogin(warning);
             });
         }
     }
