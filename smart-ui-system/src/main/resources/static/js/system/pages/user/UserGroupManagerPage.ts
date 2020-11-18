@@ -1,7 +1,5 @@
 // @ts-ignore
 import PageBuilder from 'js/common/PageBuilder'
-// @ts-ignore
-import CommonUtils from 'js/common/utils/CommonUtils'
 
 // @ts-ignore
 import moduleLoader from 'js/common/utils/ModuleLoader'

@@ -4,8 +4,10 @@ define(["require", "exports", "js/common/PageBuilder", "js/system/SysBus", "js/c
     DataApiService_1.default.validateLogin();
     class HomePage extends PageBuilder_1.default {
         initPage() {
-            window['busVue'] = SysBus_1.default();
-            this.init();
+            DataApiService_1.default.validateLogin(false).then(() => {
+                window['busVue'] = SysBus_1.default();
+                this.init();
+            });
         }
         build() {
             return page;
@@ -17,9 +19,9 @@ define(["require", "exports", "js/common/PageBuilder", "js/system/SysBus", "js/c
             BasicLayout: BasicLayout_1.default
         },
         template: `
-<div class="full-height">
-    <BasicLayout/>
-</div>        
-    `
+      <div class="full-height">
+          <BasicLayout/>
+      </div>
+	`
     };
 });
