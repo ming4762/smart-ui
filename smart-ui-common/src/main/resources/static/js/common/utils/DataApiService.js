@@ -55,7 +55,7 @@ define(["require", "exports", "./ApiService"], function (require, exports, ApiSe
             this.errorHandler = errorHandler;
         }
         static validateLogin(warning = true) {
-            this.postAjax('auth/isLogin')
+            return this.postAjax('auth/isLogin')
                 .then(data => {
                 if (!data) {
                     goLogin(warning);

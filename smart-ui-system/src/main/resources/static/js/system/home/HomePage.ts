@@ -12,7 +12,7 @@ declare global {
 	}
 }
 
-DataApiService.validateLogin()
+// DataApiService.validateLogin()
 
 /**
  *

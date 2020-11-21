@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>主页</title>
+
+    <link rel="stylesheet" th:href="@{/css/common/common.css}"/>
+    <link rel="stylesheet" th:href="@{/library/bootstrap/4.5.0/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/system/index/index.css}"/>
+</head>
+<body class="site-contabs-open site-menubar-unfold">
+    <div id="vue-container" style="height: calc(100% - 42px)">
+        <vue-main/>
+    </div>
+<!--引入axios-->
+<div th:replace="common/common-resources :: common-resources-axios"></div>
+<!--引入vue-->
+<div th:replace="common/common-resources :: common-resources-vue"></div>
+
+<div th:replace="common/common-resources :: common-resources-requireJS"></div>
+<script th:src="@{/js/common/common.js}"></script>
+
+<script type="text/javascript" th:inline="javascript">
+  ready(function () {
+    require(['js/system/index/IndexPage'], function (module) {
+      var page = new module.default()
+      page.initPage()
+    })
+  })
+</script>
+
+</body>
+</html>

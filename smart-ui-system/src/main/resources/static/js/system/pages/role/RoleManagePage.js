@@ -247,7 +247,7 @@ define(["require", "exports", "js/common/PageBuilder", "js/common/utils/ModuleLo
         methods: {
             loadFunctionTree() {
                 this.treeLoading = true;
-                DataApiService_1.default.postAjax('sys/function/list')
+                DataApiService_1.default.postAjax('sys/function/list', { sortName: 'seq' })
                     .then(data => {
                     this.functionTree = TreeUtils_1.default.convertList2Tree(data, ['functionId', 'parentId'], 0);
                 }).catch(error => {

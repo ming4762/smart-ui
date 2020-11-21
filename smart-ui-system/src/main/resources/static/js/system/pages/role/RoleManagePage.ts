@@ -278,7 +278,7 @@ const FunctionTree = {
 		 */
 		loadFunctionTree () {
 			this.treeLoading = true
-			DataApiService.postAjax('sys/function/list')
+			DataApiService.postAjax('sys/function/list', { sortName: 'seq' })
 				.then(data => {
 					this.functionTree = TreeUtils.convertList2Tree(
 						data,

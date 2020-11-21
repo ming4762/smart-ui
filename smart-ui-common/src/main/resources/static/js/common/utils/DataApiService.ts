@@ -82,7 +82,7 @@ export default class DataApiService {
 	 * 验证是否登录
 	 */
 	public static validateLogin(warning: boolean = true) {
-		this.postAjax('auth/isLogin')
+		return this.postAjax('auth/isLogin')
 			.then(data => {
 				if (!data) {
 					goLogin(warning)

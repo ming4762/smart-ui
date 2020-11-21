@@ -25,6 +25,11 @@ public class UiSystemController {
         return new ModelAndView("system/home", parameter);
     }
 
+    @RequestMapping("index")
+    public ModelAndView index(@RequestParam Map<String, String> parameter) {
+        return new ModelAndView("system/index", parameter);
+    }
+
     @RequestMapping("login")
     public ModelAndView login(@RequestParam Map<String, String> parameter) {
         return new ModelAndView("system/login", parameter);
