@@ -1,5 +1,7 @@
 // @ts-ignore
 import StoreUtil from 'js/common/utils/StoreUtil'
+// @ts-ignore
+import TreeUtils from 'js/common/utils/TreeUtils'
 
 import { STORE_KEYS } from 'js/system/constants/Constants'
 
@@ -7,6 +9,33 @@ declare const Vue: any
 
 // 标识开发模式 TODO: 可配置
 const debug = true
+
+/**
+ * 递归设置顶级ID
+ * @param menuList
+ * @param topId
+ */
+const setTopMenuId = (menuList: Array<any>, topId: string) => {
+	menuList.forEach(item => {
+		item.topKey = topId
+		if (item.children && item.children.length > 0) {
+			setTopMenuId(item.children, topId)
+		}
+	})
+}
+
+const defaultTheme = {
+	// 导航栏颜色
+	navigationColor: 'rgb(0, 125, 186)',
+	// 菜单主题：light、dark
+	menuTheme: 'dark',
+	themeColor: '#2593FC',
+	// 侧边栏宽度
+	sideWidth: 200,
+	// 导航栏高度
+	tabsHeight: 30
+}
+
 /**
  * 消息总线
  * @author shizhongming
@@ -25,9 +54,25 @@ const initBus = () => {
 			activeMenu: StoreUtil.getStore(STORE_KEYS.ACTIVE_MENU, debug) || {},
 			// 用户菜单列表
 			userMenuList: StoreUtil.getStore(STORE_KEYS.USER_MENU_LIST, debug) || [],
-
+			// 用户菜单树
+			userMenuTree: StoreUtil.getStore(STORE_KEYS.USER_MENU_TREE, debug) || [],
+			// 激活的顶部菜单
+			activeTopMenu: StoreUtil.getStore(STORE_KEYS.ACTIVE_TOP_MENU, debug) || {},
+			// 主题样式
+			theme: defaultTheme
 		},
 		methods: {
+			/**
+			 * 设置激活的顶部菜单
+			 * @param key
+			 */
+			setTopActiveMenu (key) {
+				const topMenu = this.userMenuTree.find(item => {
+					return item.topKey === key
+				}) || {}
+				this.activeTopMenu = topMenu
+				StoreUtil.setStore(STORE_KEYS.ACTIVE_TOP_MENU, topMenu, StoreUtil.SESSION_TYPE)
+			},
 			/**
 			 * 添加菜单
 			 * @param menuId 菜单ID
@@ -65,12 +110,33 @@ const initBus = () => {
 				})
 			},
 			/**
+			 * 设置用户菜单树
+			 * @param menuList
+			 */
+			setUserMenuTree(menuList: Array<any>) {
+				this.setUserMenu(menuList)
+				// 将用户菜单转为树结构
+				if (menuList.length > 0) {
+					const menuTree = TreeUtils.convertList2Tree(menuList, ['key', 'parentKey'], '0')
+					// 利用递归设置顶级菜单ID
+					menuTree.forEach(item => {
+						if (item.children && item.children.length > 0) {
+							item.topKey = item.key
+							setTopMenuId(item.children, item.key)
+						}
+					})
+					this.userMenuTree = menuTree
+					StoreUtil.setStore(STORE_KEYS.USER_MENU_TREE, menuTree, StoreUtil.SESSION_TYPE)
+				}
+			},
+			/**
 			 * 设置激活菜单
 			 * @param menu
 			 */
 			setActiveMenu(menu: any) {
 				// @ts-ignore
 				this.activeMenu = menu
+				this.setTopActiveMenu(menu.topKey)
 				StoreUtil.setStore(STORE_KEYS.ACTIVE_MENU, menu, StoreUtil.SESSION_TYPE)
 			},
 			/**

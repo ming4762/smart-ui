@@ -1,0 +1,31 @@
+a {
+  cursor: pointer;
+}
+.user-menu .ant-divider.ant-divider-horizontal {
+  margin: 2px 0 !important;
+}
+.nav-tabs .nav-link:hover {
+  border: 1px solid transparent;
+}
+.nav-tabs .nav-link span {
+  font-size: 15px;
+  font-weight: bold;
+}
+.navbar-header .header-logo {
+  height: 44px;
+  margin-top: -10px;
+}
+.navbar-header .header-title {
+  margin: -33px 0 0 52px;
+  font-size: 20px;
+}
+.header-menu li a {
+  padding: 1.287rem 15px !important;
+}
+.navbar-container .anticon {
+  vertical-align: 0.13em !important;
+}
+.site-menubar .anticon {
+  vertical-align: 0.13em !important;
+}
+/*# sourceMappingURL=index-custom.css.map */

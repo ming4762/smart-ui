@@ -11,9 +11,6 @@ const subMenu = {
 			required: true
 		}
 	},
-	mounted () {
-		console.log(this)
-	},
 	// language=html
 	template: `
 <a-sub-menu
@@ -71,6 +68,7 @@ export default {
 			if (activeMenu.key) {
 				keys.push(activeMenu.key)
 			}
+			return keys
 		},
 
 	},
@@ -93,8 +91,9 @@ export default {
 	template: `
 <a-menu
   mode="inline"
-	@click="handleClickMenu"
-  theme="dark">
+  :selectedKeys="computedActiveKeys"
+  v-bind="$attrs"
+	@click="handleClickMenu">
 	<template
 		v-for="item in menuList">
       <a-menu-item v-if="!hasChildren(item)" :key="item.key">

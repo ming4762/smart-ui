@@ -9,9 +9,6 @@ define(["require", "exports"], function (require, exports) {
                 required: true
             }
         },
-        mounted() {
-            console.log(this);
-        },
         template: `
 <a-sub-menu
   v-bind="$attrs"
@@ -60,6 +57,7 @@ define(["require", "exports"], function (require, exports) {
                 if (activeMenu.key) {
                     keys.push(activeMenu.key);
                 }
+                return keys;
             },
         },
         methods: {
@@ -73,8 +71,9 @@ define(["require", "exports"], function (require, exports) {
         template: `
 <a-menu
   mode="inline"
-	@click="handleClickMenu"
-  theme="dark">
+  :selectedKeys="computedActiveKeys"
+  v-bind="$attrs"
+	@click="handleClickMenu">
 	<template
 		v-for="item in menuList">
       <a-menu-item v-if="!hasChildren(item)" :key="item.key">

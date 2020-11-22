@@ -1,7 +1,22 @@
-define(["require", "exports", "js/common/utils/StoreUtil", "js/system/constants/Constants"], function (require, exports, StoreUtil_1, Constants_1) {
+define(["require", "exports", "js/common/utils/StoreUtil", "js/common/utils/TreeUtils", "js/system/constants/Constants"], function (require, exports, StoreUtil_1, TreeUtils_1, Constants_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     const debug = true;
+    const setTopMenuId = (menuList, topId) => {
+        menuList.forEach(item => {
+            item.topKey = topId;
+            if (item.children && item.children.length > 0) {
+                setTopMenuId(item.children, topId);
+            }
+        });
+    };
+    const defaultTheme = {
+        navigationColor: 'rgb(0, 125, 186)',
+        menuTheme: 'dark',
+        themeColor: '#2593FC',
+        sideWidth: 200,
+        tabsHeight: 30
+    };
     const initBus = () => {
         return new Vue({
             data: {
@@ -11,8 +26,18 @@ define(["require", "exports", "js/common/utils/StoreUtil", "js/system/constants/
                 openMenuList: StoreUtil_1.default.getStore(Constants_1.STORE_KEYS.OPEN_MENU_LIST, debug) || [],
                 activeMenu: StoreUtil_1.default.getStore(Constants_1.STORE_KEYS.ACTIVE_MENU, debug) || {},
                 userMenuList: StoreUtil_1.default.getStore(Constants_1.STORE_KEYS.USER_MENU_LIST, debug) || [],
+                userMenuTree: StoreUtil_1.default.getStore(Constants_1.STORE_KEYS.USER_MENU_TREE, debug) || [],
+                activeTopMenu: StoreUtil_1.default.getStore(Constants_1.STORE_KEYS.ACTIVE_TOP_MENU, debug) || {},
+                theme: defaultTheme
             },
             methods: {
+                setTopActiveMenu(key) {
+                    const topMenu = this.userMenuTree.find(item => {
+                        return item.topKey === key;
+                    }) || {};
+                    this.activeTopMenu = topMenu;
+                    StoreUtil_1.default.setStore(Constants_1.STORE_KEYS.ACTIVE_TOP_MENU, topMenu, StoreUtil_1.default.SESSION_TYPE);
+                },
                 addMenu(menuId, active = true) {
                     return new Promise(() => {
                         let menu = null;
@@ -37,8 +62,23 @@ define(["require", "exports", "js/common/utils/StoreUtil", "js/system/constants/
                         }
                     });
                 },
+                setUserMenuTree(menuList) {
+                    this.setUserMenu(menuList);
+                    if (menuList.length > 0) {
+                        const menuTree = TreeUtils_1.default.convertList2Tree(menuList, ['key', 'parentKey'], '0');
+                        menuTree.forEach(item => {
+                            if (item.children && item.children.length > 0) {
+                                item.topKey = item.key;
+                                setTopMenuId(item.children, item.key);
+                            }
+                        });
+                        this.userMenuTree = menuTree;
+                        StoreUtil_1.default.setStore(Constants_1.STORE_KEYS.USER_MENU_TREE, menuTree, StoreUtil_1.default.SESSION_TYPE);
+                    }
+                },
                 setActiveMenu(menu) {
                     this.activeMenu = menu;
+                    this.setTopActiveMenu(menu.topKey);
                     StoreUtil_1.default.setStore(Constants_1.STORE_KEYS.ACTIVE_MENU, menu, StoreUtil_1.default.SESSION_TYPE);
                 },
                 setUserMenu(menuList) {

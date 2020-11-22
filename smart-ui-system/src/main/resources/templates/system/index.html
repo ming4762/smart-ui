@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>主页</title>
-
     <link rel="stylesheet" th:href="@{/css/common/common.css}"/>
+    <div th:replace="common/common-resources :: common-resources-ant-css"></div>
     <link rel="stylesheet" th:href="@{/library/bootstrap/4.5.0/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/system/index/index-custom.css}"/>
     <link rel="stylesheet" th:href="@{/css/system/index/index.css}"/>
+    <link rel="stylesheet" th:href="@{/library/webicon/2.1.0/web-icons.css}">
+    <div th:replace="common/common-resources :: common-resources-contextPath"></div>
 </head>
 <body class="site-contabs-open site-menubar-unfold">
     <div id="vue-container" style="height: calc(100% - 42px)">
@@ -16,6 +19,8 @@
 <div th:replace="common/common-resources :: common-resources-axios"></div>
 <!--引入vue-->
 <div th:replace="common/common-resources :: common-resources-vue"></div>
+<!--引入ant-->
+<div th:replace="common/common-resources :: common-resources-ant-js"></div>
 
 <div th:replace="common/common-resources :: common-resources-requireJS"></div>
 <script th:src="@{/js/common/common.js}"></script>
