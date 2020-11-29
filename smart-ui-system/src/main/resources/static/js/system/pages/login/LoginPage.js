@@ -31,7 +31,7 @@ define(["require", "exports", "js/common/PageBuilder", "js/common/utils/ApiServi
                             const { token } = result.data;
                             ApiService_1.default.saveToken(token);
                             UserUtils_1.default.saveUserData(result.data);
-                            window.location.href = contextPath + 'ui/system/home';
+                            window.location.href = contextPath + 'ui/index';
                         }).catch((error) => {
                             this.$message.error(error.message);
                             console.error(error);

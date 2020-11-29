@@ -18,7 +18,7 @@ const Operation = {
 			this.fullscreen = !this.fullscreen
 		},
 		/**
-		 * 跳转到个人中心
+		 * 登出
 		 */
 		handleMenuClick ({ key }) {
 			switch (key) {

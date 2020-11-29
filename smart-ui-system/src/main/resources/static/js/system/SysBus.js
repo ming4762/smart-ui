@@ -15,7 +15,8 @@ define(["require", "exports", "js/common/utils/StoreUtil", "js/common/utils/Tree
         menuTheme: 'dark',
         themeColor: '#2593FC',
         sideWidth: 200,
-        tabsHeight: 30
+        tabsHeight: 30,
+        footerVisible: true
     };
     const initBus = () => {
         return new Vue({
@@ -28,7 +29,11 @@ define(["require", "exports", "js/common/utils/StoreUtil", "js/common/utils/Tree
                 userMenuList: StoreUtil_1.default.getStore(Constants_1.STORE_KEYS.USER_MENU_LIST, debug) || [],
                 userMenuTree: StoreUtil_1.default.getStore(Constants_1.STORE_KEYS.USER_MENU_TREE, debug) || [],
                 activeTopMenu: StoreUtil_1.default.getStore(Constants_1.STORE_KEYS.ACTIVE_TOP_MENU, debug) || {},
-                theme: defaultTheme
+                theme: defaultTheme,
+                control: {
+                    allLoading: false,
+                    pageLoading: false
+                }
             },
             methods: {
                 setTopActiveMenu(key) {

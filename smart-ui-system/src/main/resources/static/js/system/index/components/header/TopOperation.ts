@@ -1,5 +1,7 @@
 // @ts-ignore
 import CommonUtils from 'js/common/utils/CommonUtils'
+import SystemUtils from 'js/system/utils/SystemUtils'
+import ApiOperation from 'js/system/utils/ApiOperation'
 /**
  *
  * @author shizhongming
@@ -28,6 +30,25 @@ export default {
 		 */
 		handleSetTheme () {
 			// TODO: 开发中
+		},
+		handleClickMenu ({ key }) {
+			switch (key) {
+				case 'logout': {
+					this.logout()
+					break
+				}
+			}
+		},
+		/**
+		 * 登出操作
+		 */
+		logout () {
+			this.$confirm({
+				title: '确定要退出登录吗？',
+				onOk() {
+					ApiOperation.logout()
+				}
+			})
 		}
 	},
 	// language=html
@@ -38,7 +59,7 @@ export default {
 		          <a class="nav-link" style="padding: 17px 15px 18px 15px">
                   <a-avatar :size="24" icon="user" />
 		          </a>
-		          <a-menu slot="overlay">
+		          <a-menu @click="handleClickMenu" slot="overlay">
 				          <a-menu-item>
                       <a-icon :style="iconStyle" type="appstore"/>
                       账户信息
@@ -50,7 +71,7 @@ export default {
 				          <a-menu-item>
                       <a-divider></a-divider>
 				          </a-menu-item>
-                  <a-menu-item>
+                  <a-menu-item key="logout">
                       退出登录
                   </a-menu-item>
 		          </a-menu>

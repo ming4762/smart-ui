@@ -78,48 +78,50 @@ const page = {
 		 */
 		loadUserMenus () {
 			if (this.computedBus.userMenuTree.length === 0) {
-
+				DataApiService.postAjax('sys/user/listUserMenu')
+					.then(data => {
+						this.computedBus.setUserMenuTree(
+							data.map(item => {
+								return {
+									key: item.functionId + '',
+									title: item.functionName,
+									icon: item.icon,
+									path: item.url,
+									parentKey: item.parentId + '',
+									data: item,
+									active: false
+								}
+							})
+						)
+					}).catch(error => {
+					console.error(error)
+					this.$message.error('加载用户菜单失败')
+				})
 			}
-			// todo: 开发完毕放入判断内
-			DataApiService.postAjax('sys/user/listUserMenu')
-				.then(data => {
-					this.computedBus.setUserMenuTree(
-						data.map(item => {
-							return {
-								key: item.functionId + '',
-								title: item.functionName,
-								icon: item.icon,
-								path: item.url,
-								parentKey: item.parentId + '',
-								data: item,
-								active: false
-							}
-						})
-					)
-				}).catch(error => {
-				console.error(error)
-				this.$message.error('加载用户菜单失败')
-			})
 		}
 	},
 	// language=html
 	template: `
 	<div class="full-height">
-			<!--		头部信息		-->
-			<TopHeader class="site-navbar navbar navbar-default navbar-fixed-top navbar-inverse  bg-blue-600">
-			</TopHeader>
-			<!--		左侧菜单栏		-->
-			<nav :style="computedSideMenuStyle" class="site-menubar site-menubar-dark">
-          <SideMenu/>
-			</nav>
-			<!--		导航栏		-->
-			<Contabs :style="computedTabsStyle" class="site-contabs"/>
-			<!--		主体		-->
-			<main :style="computedMainStyle" class="site-page">
-					<PageContainer class="page-container full-height"/>
-			</main>
-      <!--		FOOTER		-->
-			<Footer :style="computedRightStyle" class="site-footer"/>
+      <a-spin class="full-height" :spinning="computedBus.control.allLoading">
+          <!--		头部信息		-->
+          <TopHeader class="site-navbar navbar navbar-default navbar-fixed-top navbar-inverse  bg-blue-600">
+          </TopHeader>
+          <!--		左侧菜单栏		-->
+          <nav :style="computedSideMenuStyle" class="site-menubar site-menubar-dark">
+              <SideMenu/>
+          </nav>
+          <!--		导航栏		-->
+          <Contabs :style="computedTabsStyle" class="site-contabs"/>
+          <!--		主体		-->
+          <main :style="computedMainStyle" class="site-page">
+              <a-spin class="full-height" :spinning="computedBus.control.pageLoading">
+                  <PageContainer class="page-container full-height"/>
+              </a-spin>
+          </main>
+          <!--		FOOTER		-->
+          <Footer v-if="computedBus.theme.footerVisible" :style="computedRightStyle" class="site-footer"/>
+      </a-spin>
 	</div>
 	`
 }

@@ -11,7 +11,7 @@ import java.util.Map;
  * @author shizhongming
  * 2020/8/29 7:47 下午
  */
-@RequestMapping
+@RequestMapping("ui")
 @Controller
 public class UiSystemController {
 
