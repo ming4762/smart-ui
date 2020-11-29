@@ -65,10 +65,11 @@ const page = {
 		 * 主体样式计算属性
 		 */
 		computedMainStyle () {
+			const height = this.computedBus.theme.footerVisible === true ? 44 : 0
 			return {
 				...this.computedRightStyle,
 				'margin-top': this.computedTheme.tabsHeight + 'px',
-				height: `calc(100% - ${this.computedTheme.tabsHeight + 2}px)`
+				height: `calc(100% - ${height}px)`
 			}
 		}
 	},
@@ -102,7 +103,7 @@ const page = {
 	},
 	// language=html
 	template: `
-	<div class="full-height">
+	<div style="height: calc(100% - 30px)">
       <a-spin class="full-height" :spinning="computedBus.control.allLoading">
           <!--		头部信息		-->
           <TopHeader class="site-navbar navbar navbar-default navbar-fixed-top navbar-inverse  bg-blue-600">

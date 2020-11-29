@@ -44,7 +44,8 @@ define(["require", "exports", "js/common/PageBuilder", "./components/header/TopH
                 return Object.assign(Object.assign({}, this.computedTabsHeight), this.computedRightStyle);
             },
             computedMainStyle() {
-                return Object.assign(Object.assign({}, this.computedRightStyle), { 'margin-top': this.computedTheme.tabsHeight + 'px', height: `calc(100% - ${this.computedTheme.tabsHeight + 2}px)` });
+                const height = this.computedBus.theme.footerVisible === true ? 44 : 0;
+                return Object.assign(Object.assign({}, this.computedRightStyle), { 'margin-top': this.computedTheme.tabsHeight + 'px', height: `calc(100% - ${height}px)` });
             }
         },
         methods: {
@@ -71,7 +72,7 @@ define(["require", "exports", "js/common/PageBuilder", "./components/header/TopH
             }
         },
         template: `
-	<div class="full-height">
+	<div style="height: calc(100% - 30px)">
       <a-spin class="full-height" :spinning="computedBus.control.allLoading">
           <!--		头部信息		-->
           <TopHeader class="site-navbar navbar navbar-default navbar-fixed-top navbar-inverse  bg-blue-600">
