@@ -103,7 +103,7 @@ const page = {
 	},
 	// language=html
 	template: `
-	<div style="height: calc(100% - 30px)">
+	<div style="height: 100%">
       <a-spin class="full-height" :spinning="computedBus.control.allLoading">
           <!--		头部信息		-->
           <TopHeader class="site-navbar navbar navbar-default navbar-fixed-top navbar-inverse  bg-blue-600">

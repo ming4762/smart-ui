@@ -1,7 +1,8 @@
 // @ts-ignore
 import CommonUtils from 'js/common/utils/CommonUtils'
-import SystemUtils from 'js/system/utils/SystemUtils'
 import ApiOperation from 'js/system/utils/ApiOperation'
+// @ts-ignore
+import ApiService from 'js/common/utils/ApiService'
 /**
  *
  * @author shizhongming
