@@ -1,4 +1,4 @@
-define(["require", "exports", "js/common/utils/CommonUtils"], function (require, exports, CommonUtils_1) {
+define(["require", "exports", "js/common/utils/CommonUtils", "js/system/utils/ApiOperation"], function (require, exports, CommonUtils_1, ApiOperation_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = {
@@ -16,6 +16,22 @@ define(["require", "exports", "js/common/utils/CommonUtils"], function (require,
                 CommonUtils_1.default.fullScreen(this.isFullScreen);
             },
             handleSetTheme() {
+            },
+            handleClickMenu({ key }) {
+                switch (key) {
+                    case 'logout': {
+                        this.logout();
+                        break;
+                    }
+                }
+            },
+            logout() {
+                this.$confirm({
+                    title: '确定要退出登录吗？',
+                    onOk() {
+                        ApiOperation_1.default.logout();
+                    }
+                });
             }
         },
         template: `
@@ -25,7 +41,7 @@ define(["require", "exports", "js/common/utils/CommonUtils"], function (require,
 		          <a class="nav-link" style="padding: 17px 15px 18px 15px">
                   <a-avatar :size="24" icon="user" />
 		          </a>
-		          <a-menu slot="overlay">
+		          <a-menu @click="handleClickMenu" slot="overlay">
 				          <a-menu-item>
                       <a-icon :style="iconStyle" type="appstore"/>
                       账户信息
@@ -37,7 +53,7 @@ define(["require", "exports", "js/common/utils/CommonUtils"], function (require,
 				          <a-menu-item>
                       <a-divider></a-divider>
 				          </a-menu-item>
-                  <a-menu-item>
+                  <a-menu-item key="logout">
                       退出登录
                   </a-menu-item>
 		          </a-menu>

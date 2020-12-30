@@ -33,7 +33,9 @@ const defaultTheme = {
 	// 侧边栏宽度
 	sideWidth: 200,
 	// 导航栏高度
-	tabsHeight: 30
+	tabsHeight: 30,
+	// footer是否显示
+	footerVisible: true
 }
 
 /**
@@ -59,7 +61,13 @@ const initBus = () => {
 			// 激活的顶部菜单
 			activeTopMenu: StoreUtil.getStore(STORE_KEYS.ACTIVE_TOP_MENU, debug) || {},
 			// 主题样式
-			theme: defaultTheme
+			theme: defaultTheme,
+			control: {
+				// 整个区域加载状态
+				allLoading: false,
+				// 页面加载状态
+				pageLoading: false
+			}
 		},
 		methods: {
 			/**

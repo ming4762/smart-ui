@@ -54,7 +54,7 @@ const page = {
 						// 待完善
 						ApiService.saveToken(token)
 						UserUtils.saveUserData(result.data)
-						window.location.href = contextPath + 'ui/system/home'
+						window.location.href = contextPath + 'ui/index'
 					}).catch((error) => {
 						this.$message.error(error.message)
 						console.error(error)
