@@ -92,7 +92,7 @@ export default {
 <a-menu
   mode="inline"
   :selectedKeys="computedActiveKeys"
-  v-bind="$attrs"
+  theme="dark"
 	@click="handleClickMenu">
 	<template
 		v-for="item in menuList">
